@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-// Proxy para evitar o bloqueio de imagem/vídeo do Instagram no navegador
+// Proxy para bypassar bloqueio de imagens do Instagram
 const proxify = (url) => {
   if (!url || typeof url !== "string") return "";
   if (url.includes("ui-avatars.com")) return url;
@@ -23,101 +23,85 @@ app.get("/api/profile", async (req, res) => {
     }
 
     const apiKey = "fb6cd7e924msh9fe32786b6578cbp138615jsne52a772bf92f";
-    const apiHost = "instagram-best-experience.p.rapidapi.com";
+    const hostLooter = "instagram-looter2.p.rapidapi.com";
+    const hostBestExp = "instagram-best-experience.p.rapidapi.com";
 
-    // 1. Busca os dados do perfil pelo username
-    const profileRes = await fetch(`https://${apiHost}/user/profile-by-username?username=${encodeURIComponent(username)}`, {
+    // 1. Puxa dados do perfil via Instagram Looter (100% funcional)
+    const profileRes = await fetch(`https://${hostLooter}/profile?username=${encodeURIComponent(username)}`, {
       method: "GET",
       headers: {
-        "x-rapidapi-host": apiHost,
+        "x-rapidapi-host": hostLooter,
         "x-rapidapi-key": apiKey
       }
     });
 
-    const profileData = await profileRes.json().catch(() => null);
+    const apiData = await profileRes.json().catch(() => null);
 
-    if (!profileRes.ok || !profileData) {
+    if (!profileRes.ok || !apiData) {
       return res.status(502).json({ error: "Não foi possível carregar o perfil." });
     }
 
-    const user = profileData.data || profileData.user || profileData.result || profileData;
+    const user = apiData.data || apiData.user || apiData.result || apiData;
 
     if (!user || user.message === "Not found") {
       return res.status(404).json({ error: "Perfil não encontrado no Instagram." });
     }
 
-    const userId = user.id || user.pk || user.user_id;
+    const userId = user.id || user.pk || user.rest_id;
     const isPrivate = Boolean(user.is_private);
 
-    // 2. Busca Stories e Feed em paralelo (se o perfil for público)
-    let formattedStories = [];
+    // 2. Processa Posts do Feed
     let formattedPosts = [];
+    const rawPosts = user.edge_owner_to_timeline_media?.edges || user.posts || user.media || [];
 
-    if (!isPrivate && userId) {
-      const [storiesRes, feedRes] = await Promise.allSettled([
-        fetch(`https://${apiHost}/user/stories?user_id=${userId}`, {
-          headers: { "x-rapidapi-host": apiHost, "x-rapidapi-key": apiKey }
-        }),
-        fetch(`https://${apiHost}/user/feed?user_id=${userId}`, {
-          headers: { "x-rapidapi-host": apiHost, "x-rapidapi-key": apiKey }
-        })
-      ]);
-
-      // Processa os Stories retornados
-      if (storiesRes.status === "fulfilled" && storiesRes.value.ok) {
-        const storiesData = await storiesRes.value.json().catch(() => null);
-        const storyItems = storiesData?.data || storiesData?.items || storiesData?.result || [];
-
-        if (Array.isArray(storyItems)) {
-          formattedStories = storyItems.map((story, i) => {
-            const mediaUrl = story.video_versions?.[0]?.url || story.image_versions2?.candidates?.[0]?.url || story.display_url || story.image_url;
-            return {
-              id: story.id || `story_${i}`,
-              type: story.video_versions ? "video" : "image",
-              url: proxify(mediaUrl),
-              time: "Ativo"
-            };
-          });
-        }
-      }
-
-      // Processa os Posts do Feed
-      if (feedRes.status === "fulfilled" && feedRes.value.ok) {
-        const feedData = await feedRes.value.json().catch(() => null);
-        const feedItems = feedData?.data || feedData?.items || feedData?.edges || [];
-
-        if (Array.isArray(feedItems)) {
-          formattedPosts = feedItems.map((item, i) => {
-            const node = item.node || item;
-            const img = node.image_versions2?.candidates?.[0]?.url || node.display_url || node.image_url;
-            return {
-              id: node.id || `post_${i}`,
-              image: proxify(img),
-              likes: node.like_count ?? node.edge_liked_by?.count ?? 0,
-              comments: node.comment_count ?? node.edge_media_to_comment?.count ?? 0,
-              caption: node.caption?.text || node.edge_media_to_caption?.edges?.[0]?.node?.text || ""
-            };
-          });
-        }
-      }
-    }
-
-    // Se o perfil for público e o endpoint de feed não trouxer nada, usa o fallback de mídia do perfil
-    if (formattedPosts.length === 0 && !isPrivate) {
-      const rawPosts = user.edge_owner_to_timeline_media?.edges || [];
+    if (Array.isArray(rawPosts) && rawPosts.length > 0) {
       formattedPosts = rawPosts.map((item, index) => {
         const node = item.node || item;
+        const rawImg = node.display_url || node.display_src || node.image_url || node.thumbnail_src;
         return {
           id: node.id || `post_${index}`,
-          image: proxify(node.display_url || node.thumbnail_src),
-          likes: node.edge_liked_by?.count ?? 0,
-          comments: node.edge_media_to_comment?.count ?? 0,
-          caption: node.edge_media_to_caption?.edges?.[0]?.node?.text || ""
+          image: proxify(rawImg),
+          likes: node.edge_liked_by?.count ?? node.like_count ?? 0,
+          comments: node.edge_media_to_comment?.count ?? node.comment_count ?? 0,
+          caption: node.edge_media_to_caption?.edges?.[0]?.node?.text || node.caption || ""
         };
       });
     }
 
-    const rawProfilePic = user.profile_pic_url_hd || user.profile_pic_url;
+    // 3. Tenta buscar Stories via Instagram Best Experience
+    let formattedStories = [];
+    if (!isPrivate && userId) {
+      try {
+        const storiesRes = await fetch(`https://${hostBestExp}/stories?user_id=${userId}`, {
+          method: "GET",
+          headers: {
+            "x-rapidapi-host": hostBestExp,
+            "x-rapidapi-key": apiKey
+          }
+        });
+
+        if (storiesRes.ok) {
+          const storiesData = await storiesRes.json().catch(() => null);
+          const items = storiesData?.data || storiesData?.items || storiesData?.result || [];
+
+          if (Array.isArray(items)) {
+            formattedStories = items.map((story, i) => {
+              const mediaUrl = story.video_versions?.[0]?.url || story.image_versions2?.candidates?.[0]?.url || story.display_url || story.image_url;
+              return {
+                id: story.id || `story_${i}`,
+                type: story.video_versions ? "video" : "image",
+                url: proxify(mediaUrl),
+                time: "Ativo"
+              };
+            });
+          }
+        }
+      } catch (e) {
+        console.log("Stories não carregados:", e.message);
+      }
+    }
+
+    const rawProfilePic = user.profile_pic_url_hd || user.profile_pic_url || user.profilePic;
     const finalProfilePic = rawProfilePic 
       ? proxify(rawProfilePic) 
       : `https://ui-avatars.com/api/?name=${username}&background=833ab4&color=fff`;
@@ -126,12 +110,12 @@ app.get("/api/profile", async (req, res) => {
       success: true,
       profile: {
         username: user.username || username,
-        fullName: user.full_name || user.username || username,
+        fullName: user.full_name || user.fullName || user.username || username,
         biography: user.biography || "Sem biografia.",
         profilePic: finalProfilePic,
-        postsCount: user.media_count ?? user.edge_owner_to_timeline_media?.count ?? formattedPosts.length,
-        followersCount: user.follower_count ?? user.edge_followed_by?.count ?? 0,
-        followingCount: user.following_count ?? user.edge_follow?.count ?? 0,
+        postsCount: user.edge_owner_to_timeline_media?.count ?? user.media_count ?? formattedPosts.length,
+        followersCount: user.edge_followed_by?.count ?? user.follower_count ?? 0,
+        followingCount: user.edge_follow?.count ?? user.following_count ?? 0,
         isPrivate: isPrivate,
         isVerified: Boolean(user.is_verified)
       },
@@ -140,8 +124,8 @@ app.get("/api/profile", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Erro interno no servidor:", error);
-    return res.status(500).json({ error: "Erro interno no servidor." });
+    console.error("Erro interno:", error);
+    return res.status(500).json({ error: "Erro ao processar requisição." });
   }
 });
 
