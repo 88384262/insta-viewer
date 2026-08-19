@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-// Função para bypassar o bloqueio de imagem do Instagram usando Proxy seguro
+// Proxy para bypassar o bloqueio de imagens/vídeos do Instagram
 const proxify = (url) => {
   if (!url || typeof url !== "string") return "";
   if (url.includes("ui-avatars.com")) return url;
@@ -25,7 +25,7 @@ app.get("/api/profile", async (req, res) => {
     const apiKey = "fb6cd7e924msh9fe32786b6578cbp138615jsne52a772bf92f";
     const apiHost = "instagram-looter2.p.rapidapi.com";
 
-    // Busca o perfil completo
+    // 1. Busca os dados do perfil
     const response = await fetch(`https://${apiHost}/profile?username=${encodeURIComponent(username)}`, {
       method: "GET",
       headers: {
@@ -37,7 +37,6 @@ app.get("/api/profile", async (req, res) => {
     const apiData = await response.json().catch(() => null);
 
     if (!response.ok || !apiData) {
-      console.error("Erro da RapidAPI:", response.status, apiData);
       return res.status(502).json({ error: "Não foi possível carregar os dados do perfil." });
     }
 
@@ -47,7 +46,9 @@ app.get("/api/profile", async (req, res) => {
       return res.status(404).json({ error: "Perfil não encontrado no Instagram." });
     }
 
-    // Processa os posts reais se existirem
+    const userId = user.id || user.pk || user.rest_id;
+
+    // 2. Processa as Publicações do Feed
     let formattedPosts = [];
     const rawPosts = user.edge_owner_to_timeline_media?.edges || user.posts || user.media || [];
 
@@ -65,20 +66,40 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    // Processa os stories reais
+    // 3. Tenta buscar os Stories usando o ID do usuário (se não for privado)
     let formattedStories = [];
-    const rawStories = user.stories || user.reels || user.story_items || [];
+    if (!user.is_private && userId) {
+      try {
+        const storiesResponse = await fetch(`https://${apiHost}/stories?user_id=${userId}`, {
+          method: "GET",
+          headers: {
+            "x-rapidapi-host": apiHost,
+            "x-rapidapi-key": apiKey
+          }
+        });
 
-    if (Array.isArray(rawStories) && rawStories.length > 0) {
-      formattedStories = rawStories.map((story, index) => ({
-        id: story.id || `story_${index}`,
-        type: story.is_video ? "video" : "image",
-        url: proxify(story.display_url || story.image_url || story.video_url || story.media_url),
-        time: "Há poucas horas"
-      }));
+        if (storiesResponse.ok) {
+          const storiesData = await storiesResponse.json();
+          const items = storiesData.items || storiesData.reels || storiesData.stories || storiesData.data || [];
+
+          if (Array.isArray(items)) {
+            formattedStories = items.map((story, index) => {
+              const mediaUrl = story.video_versions?.[0]?.url || story.image_versions2?.candidates?.[0]?.url || story.display_url || story.image_url;
+              return {
+                id: story.id || `story_${index}`,
+                type: story.video_versions ? "video" : "image",
+                url: proxify(mediaUrl),
+                time: "Ativo"
+              };
+            });
+          }
+        }
+      } catch (e) {
+        console.log("Stories não disponíveis no momento para este perfil.");
+      }
     }
 
-    // Foto de perfil original usando o Proxy para não quebrar
+    // Processa a Foto de Perfil com Proxy
     const rawProfilePic = user.profile_pic_url_hd || user.profile_pic_url || user.profilePic;
     const finalProfilePic = rawProfilePic 
       ? proxify(rawProfilePic) 
@@ -103,7 +124,7 @@ app.get("/api/profile", async (req, res) => {
 
   } catch (error) {
     console.error("Erro interno no servidor:", error);
-    return res.status(500).json({ error: "Erro ao processar busca no servidor." });
+    return res.status(500).json({ error: "Erro ao processar busca." });
   }
 });
 
