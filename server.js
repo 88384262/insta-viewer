@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-// Proxy para bypass de CORS/bloqueio de imagem do IG
+// Proxy para bypassar bloqueio de imagem do IG
 const proxify = (url) => {
   if (!url || typeof url !== "string") return "";
   if (url.includes("ui-avatars.com")) return url;
@@ -47,10 +47,12 @@ app.get("/api/profile", async (req, res) => {
       return res.status(404).json({ error: "Perfil não encontrado." });
     }
 
-    const userId = String(user.pk || user.id || user.rest_id || "");
+    // Limpa o ID para garantir formato numérico puro
+    const rawId = user.pk || user.id || user.rest_id || user.pk_id || "";
+    const userId = String(rawId).replace(/\D/g, "");
     const isPrivate = Boolean(user.is_private);
 
-    // 2. Processa Posts
+    // 2. Processa Posts do Feed
     let formattedPosts = [];
     const rawPosts = user.edge_owner_to_timeline_media?.edges || user.posts || user.media || [];
 
@@ -68,7 +70,7 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    // 3. Puxa Stories Reais na nova API
+    // 3. Puxa Stories Reais na API secundária
     let formattedStories = [];
 
     if (!isPrivate && userId) {
@@ -84,29 +86,40 @@ app.get("/api/profile", async (req, res) => {
         if (storiesRes.ok) {
           const storiesData = await storiesRes.json().catch(() => null);
 
+          // Varre todas as estruturas possíveis de retorno da RapidAPI
           const items = 
-            storiesData?.data?.items || 
             storiesData?.items || 
+            storiesData?.data?.items || 
+            storiesData?.reels_media?.[0]?.items || 
             storiesData?.data || 
             storiesData?.result || 
             [];
 
           if (Array.isArray(items)) {
             formattedStories = items.map((story, i) => {
-              const video = story.video_versions?.[0]?.url || story.video_url;
-              const image = story.image_versions2?.candidates?.[0]?.url || story.display_url || story.image_url;
-              
+              const video = 
+                story.video_versions?.[0]?.url || 
+                story.video_url || 
+                story.download_url;
+
+              const image = 
+                story.image_versions2?.candidates?.[0]?.url || 
+                story.display_url || 
+                story.image_url;
+
+              const mediaUrl = video || image;
+
               return {
-                id: story.id || `story_${i}`,
+                id: story.id || story.pk || `story_${i}`,
                 type: video ? "video" : "image",
-                url: proxify(video || image),
+                url: proxify(mediaUrl),
                 time: "Ativo"
               };
             }).filter(s => Boolean(s.url));
           }
         }
       } catch (e) {
-        console.error("Erro na busca de stories:", e.message);
+        console.error("Erro ao processar busca de stories:", e.message);
       }
     }
 
