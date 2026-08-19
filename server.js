@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-// Proxy para bypassar bloqueio de imagem do IG
+// Proxy para liberar imagens/vídeos do Instagram sem erro de CORS/bloqueio
 const proxify = (url) => {
   if (!url || typeof url !== "string") return "";
   if (url.includes("ui-avatars.com")) return url;
@@ -26,7 +26,7 @@ app.get("/api/profile", async (req, res) => {
     const hostLooter = "instagram-looter2.p.rapidapi.com";
     const hostStories = "instagram-api-fast-reliable-data-scraper.p.rapidapi.com";
 
-    // 1. Puxa perfil via Instagram Looter
+    // 1. Busca Perfil e Posts via Instagram Looter
     const profileRes = await fetch(`https://${hostLooter}/profile?username=${encodeURIComponent(username)}`, {
       method: "GET",
       headers: {
@@ -47,7 +47,6 @@ app.get("/api/profile", async (req, res) => {
       return res.status(404).json({ error: "Perfil não encontrado." });
     }
 
-    // Limpa o ID para garantir formato numérico puro
     const rawId = user.pk || user.id || user.rest_id || user.pk_id || "";
     const userId = String(rawId).replace(/\D/g, "");
     const isPrivate = Boolean(user.is_private);
@@ -70,56 +69,74 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    // 3. Puxa Stories Reais na API secundária
+    // 3. BUSCA ROBUSTA DE STORIES (Testa múltiplas combinações)
     let formattedStories = [];
 
-    if (!isPrivate && userId) {
-      try {
-        const storiesRes = await fetch(`https://${hostStories}/stories?user_id=${userId}`, {
-          method: "GET",
-          headers: {
-            "x-rapidapi-host": hostStories,
-            "x-rapidapi-key": apiKey
+    if (!isPrivate) {
+      const endpointsToTry = [];
+      
+      if (userId) {
+        endpointsToTry.push(`https://${hostStories}/stories?user_id=${userId}`);
+        endpointsToTry.push(`https://${hostStories}/user/stories?user_id=${userId}`);
+      }
+      endpointsToTry.push(`https://${hostStories}/stories?username=${encodeURIComponent(username)}`);
+
+      for (const url of endpointsToTry) {
+        try {
+          const storiesRes = await fetch(url, {
+            method: "GET",
+            headers: {
+              "x-rapidapi-host": hostStories,
+              "x-rapidapi-key": apiKey
+            }
+          });
+
+          if (storiesRes.ok) {
+            const storiesData = await storiesRes.json().catch(() => null);
+
+            // Mapeia onde quer que a lista de mídias esteja dentro da resposta
+            const items = 
+              storiesData?.items || 
+              storiesData?.data?.items || 
+              storiesData?.reels_media?.[0]?.items || 
+              storiesData?.reels?.[0]?.items ||
+              storiesData?.stories ||
+              storiesData?.data || 
+              storiesData?.result || 
+              [];
+
+            if (Array.isArray(items) && items.length > 0) {
+              const parsed = items.map((story, i) => {
+                const video = 
+                  story.video_versions?.[0]?.url || 
+                  story.video_url || 
+                  story.download_url;
+
+                const image = 
+                  story.image_versions2?.candidates?.[0]?.url || 
+                  story.display_url || 
+                  story.image_url ||
+                  story.thumbnail_url;
+
+                const mediaUrl = video || image;
+
+                return {
+                  id: story.id || story.pk || `story_${i}`,
+                  type: video ? "video" : "image",
+                  url: proxify(mediaUrl),
+                  time: "Ativo"
+                };
+              }).filter(s => Boolean(s.url));
+
+              if (parsed.length > 0) {
+                formattedStories = parsed;
+                break; // Encontrou stories reais, cancela os outros testes!
+              }
+            }
           }
-        });
-
-        if (storiesRes.ok) {
-          const storiesData = await storiesRes.json().catch(() => null);
-
-          // Varre todas as estruturas possíveis de retorno da RapidAPI
-          const items = 
-            storiesData?.items || 
-            storiesData?.data?.items || 
-            storiesData?.reels_media?.[0]?.items || 
-            storiesData?.data || 
-            storiesData?.result || 
-            [];
-
-          if (Array.isArray(items)) {
-            formattedStories = items.map((story, i) => {
-              const video = 
-                story.video_versions?.[0]?.url || 
-                story.video_url || 
-                story.download_url;
-
-              const image = 
-                story.image_versions2?.candidates?.[0]?.url || 
-                story.display_url || 
-                story.image_url;
-
-              const mediaUrl = video || image;
-
-              return {
-                id: story.id || story.pk || `story_${i}`,
-                type: video ? "video" : "image",
-                url: proxify(mediaUrl),
-                time: "Ativo"
-              };
-            }).filter(s => Boolean(s.url));
-          }
+        } catch (e) {
+          console.error("Tentativa de buscar stories falhou para:", url, e.message);
         }
-      } catch (e) {
-        console.error("Erro ao processar busca de stories:", e.message);
       }
     }
 
