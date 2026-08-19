@@ -23,7 +23,7 @@
         <span>PDF<strong>Convert</strong></span>
       </a>
 
-      <!-- MENU DE NAVEGAÇÃO EXIGIDO PELO ADSENSE -->
+      <!-- MENU DE NAVEGAÇÃO ADSENSE -->
       <nav style="display: flex; gap: 20px; align-items: center;">
         <a href="#converter" style="color: #a1a1aa; text-decoration: none; font-size: 0.9rem; font-weight: 500;">Converter</a>
         <a href="#como-funciona" style="color: #a1a1aa; text-decoration: none; font-size: 0.9rem; font-weight: 500;">Como Funciona</a>
@@ -41,68 +41,74 @@
     <!-- Hero / Área do Conversor -->
     <section id="converter" class="hero-section" style="text-align: center; padding: 40px 20px;">
       <h1 style="font-size: 2.2rem; color: #fff; margin-bottom: 15px;">Converter TXT e Imagens em <span class="gradient-text" style="color: #6366f1;">PDF Online</span></h1>
-      <p class="hero-desc" style="color: #a1a1aa; max-width: 600px; margin: 0 auto 30px;">Transforme arquivos de texto (.txt) e imagens (JPG, PNG, WEBP) em documentos PDF de alta qualidade instantaneamente no seu navegador.</p>
+      <p class="hero-desc" style="color: #a1a1aa; max-width: 600px; margin: 0 auto 30px;">Transforme arquivos de texto, imagens ou cole seu texto diretamente para gerar documentos PDF instantaneamente.</p>
 
-      <!-- 🛠️ APLICAÇÃO CONVERSORA -->
-      <div id="converterApp" style="max-width: 600px; margin: 0 auto; background: rgba(255, 255, 255, 0.04); padding: 30px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1);">
+      <!-- 🛠️ FERRAMENTA COMPLETA -->
+      <div id="converterApp" style="max-width: 650px; margin: 0 auto; background: rgba(255, 255, 255, 0.04); padding: 30px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: left;">
         
-        <!-- Caixas de Upload -->
-        <div id="dropArea" style="border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 30px 20px; cursor: pointer; transition: 0.3s; margin-bottom: 20px;" onclick="document.getElementById('fileInput').click()">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" style="margin-bottom: 10px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-          <p style="color: #fff; font-weight: 600; margin-bottom: 5px;">Clique aqui ou arraste seus arquivos</p>
-          <span style="color: #71717a; font-size: 0.85rem;">Suporta TXT, JPG, PNG e WEBP</span>
-          <input type="file" id="fileInput" accept=".txt, image/*" multiple style="display: none;" />
+        <!-- OPÇÃO 1: Upload de Arquivos -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem;">1. Selecione ou arraste um arquivo (.txt, .jpg, .png):</label>
+          <div id="dropArea" style="border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 25px 20px; cursor: pointer; text-align: center; background: rgba(0,0,0,0.2);" onclick="document.getElementById('fileInput').click()">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" style="margin-bottom: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <p style="color: #fff; font-weight: 600; margin-bottom: 4px; font-size: 0.9rem;">Clique para escolher um arquivo</p>
+            <span style="color: #71717a; font-size: 0.8rem;">Suporta arquivos TXT e Imagens (JPG, PNG)</span>
+            <input type="file" id="fileInput" accept=".txt, image/*" style="display: none;" />
+          </div>
+          <div id="fileName" style="margin-top: 8px; color: #4ade80; font-size: 0.85rem; font-weight: 500;"></div>
         </div>
 
-        <!-- Info do Arquivo Selecionado -->
-        <div id="fileInfo" style="margin-bottom: 20px; color: #4ade80; font-weight: 500; font-size: 0.9rem;"></div>
+        <div style="text-align: center; color: #71717a; margin: 15px 0; font-size: 0.85rem; font-weight: 600;">— OU COLE O TEXTO ABAIXO —</div>
+
+        <!-- OPÇÃO 2: Caixa para Colar o Texto Direto -->
+        <div style="margin-bottom: 20px;">
+          <label for="textInput" style="display: block; color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem;">2. Cole seu texto aqui para converter na hora:</label>
+          <textarea id="textInput" rows="6" placeholder="Digite ou cole aqui o conteúdo do seu documento..." style="width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; color: #fff; font-family: inherit; font-size: 0.9rem; resize: vertical; box-sizing: border-box;"></textarea>
+        </div>
 
         <!-- Botão de Ação -->
         <button id="convertBtn" style="background: #6366f1; color: #fff; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; width: 100%; transition: 0.2s;">
-          Converter para PDF
+          Gerar e Baixar PDF
         </button>
 
       </div>
     </section>
 
-    <!-- 🟢 CONTEÚDO EDITORIAL EXIGIDO PELO ADSENSE -->
+    <!-- 🟢 CONTEÚDO EDITORIAL PARA APROVAÇÃO ADSENSE -->
     <section class="seo-content-section" style="max-width: 900px; margin: 60px auto 20px; padding: 0 20px; color: #a1a1aa; line-height: 1.7; font-size: 0.95rem;">
       
-      <!-- Como Funciona -->
       <article id="como-funciona" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
         <h2 style="color: #fff; font-size: 1.5rem; margin-bottom: 15px;">Como Converter TXT e Imagens para PDF?</h2>
-        <p style="margin-bottom: 15px;">Nossa ferramenta web foi desenvolvida para simplificar a criação de documentos PDF a partir de textos simples ou arquivos de imagem. O processo é totalmente automatizado e concluído em poucos passos:</p>
+        <p style="margin-bottom: 15px;">Nossa ferramenta web foi desenvolvida para simplificar a criação de documentos PDF a partir de textos simples, arquivos locais ou colando mensagens diretamente na caixa de texto. O processo é totalmente automatizado:</p>
         <ol style="margin-left: 20px; margin-bottom: 15px;">
-          <li style="margin-bottom: 8px;"><strong>Selecione o arquivo:</strong> Escolha um arquivo de texto (.txt) ou uma imagem (JPG, PNG) do seu computador ou celular.</li>
-          <li style="margin-bottom: 8px;"><strong>Processamento Instantâneo:</strong> A ferramenta formata o conteúdo e gera a estrutura do documento PDF mantendo a qualidade original.</li>
-          <li style="margin-bottom: 8px;"><strong>Baixe o PDF:</strong> Clique no botão de download para salvar o novo arquivo PDF gerado em seu dispositivo.</li>
+          <li style="margin-bottom: 8px;"><strong>Escolha a entrada:</strong> Selecione um arquivo (.txt ou imagem) do seu dispositivo ou simplesmente cole o texto copiado no campo.</li>
+          <li style="margin-bottom: 8px;"><strong>Conversão Instantânea:</strong> A ferramenta formata automaticamente o texto e as imagens no layout oficial de documento PDF.</li>
+          <li style="margin-bottom: 8px;"><strong>Baixe o PDF:</strong> Clique no botão para realizar o download imediato do arquivo gerado.</li>
         </ol>
       </article>
 
-      <!-- Recursos e Segurança -->
       <article id="recursos" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
         <h2 style="color: #fff; font-size: 1.5rem; margin-bottom: 15px;">Segurança e Privacidade dos Seus Documentos</h2>
-        <p style="margin-bottom: 15px;">A privacidade dos seus dados é a nossa prioridade. Todo o processamento de conversão é feito de forma segura e temporária. Não armazenamos, salvamos ou compartilhamos nenhum dos arquivos enviados pelos usuários em nossos servidores.</p>
-        <p>Assim que a conversão é concluída e o arquivo PDF é baixado, seus dados temporários são descartados automaticamente do sistema.</p>
+        <p style="margin-bottom: 15px;">A privacidade dos seus dados é a nossa prioridade. Todo o processamento de conversão ocorre diretamente no seu próprio navegador de forma temporária. Não armazenamos nem salvamos o conteúdo dos seus textos e arquivos em nossos servidores.</p>
+        <p>Assim que o arquivo PDF é baixado, as informações temporárias são completamente apagadas da memória do navegador.</p>
       </article>
 
-      <!-- FAQ -->
       <article id="faq" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
         <h2 style="color: #fff; font-size: 1.5rem; margin-bottom: 20px;">Perguntas Frequentes (FAQ)</h2>
         
         <div style="margin-bottom: 20px;">
           <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">1. A conversão de arquivos é gratuita?</h3>
-          <p>Sim, o serviço é 100% gratuito, sem limite diário de uso e sem necessidade de cadastro ou pagamento.</p>
+          <p>Sim, o serviço é 100% gratuito, sem limite diário e sem necessidade de cadastro.</p>
         </div>
 
         <div style="margin-bottom: 20px;">
-          <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">2. Quais formatos de imagem são suportados?</h3>
-          <p>Nossa ferramenta suporta os principais formatos de imagem do mercado, incluindo JPG, JPEG, PNG e WEBP.</p>
+          <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">2. Posso colar textos longos?</h3>
+          <p>Sim! Você pode colar qualquer tamanho de texto na caixa dedicada e o conversor criará as páginas do PDF adequadamente.</p>
         </div>
 
         <div>
-          <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">3. Posso usar no celular?</h3>
-          <p>Sim! A plataforma é inteiramente responsiva e funciona em qualquer smartphone (Android ou iPhone) e computador.</p>
+          <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">3. Funciona em celulares?</h3>
+          <p>Sim! O site é responsivo para navegadores de celulares Android, iPhone e computadores.</p>
         </div>
       </article>
 
