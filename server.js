@@ -15,15 +15,14 @@ app.get("/api/profile", async (req, res) => {
       return res.status(400).json({ error: "Digite um @usuário válido." });
     }
 
-    // --- DADOS DA RAPIDAPI DEFINIDOS DIRETO NO CÓDIGO ---
     const apiKey = "fb6cd7e924msh9fe32786b6578cbp138615jsne52a772bf92f";
     const apiHost = "instagram-scraper-stable-api.p.rapidapi.com";
 
-    // Prepara os parâmetros no formato do formulário esperado pela API
+    // Parâmetros esperados pela API para buscar usuário
     const params = new URLSearchParams();
-    params.append("username_or_url", username);
+    params.append("username_or_id_or_url", username);
 
-    // Faz a chamada POST para a RapidAPI
+    // Faz a chamada POST para o endpoint correto da RapidAPI
     const response = await fetch(`https://${apiHost}/get_ig_user_info_v2.php`, {
       method: "POST",
       headers: {
@@ -34,28 +33,34 @@ app.get("/api/profile", async (req, res) => {
       body: params.toString()
     });
 
-    if (!response.ok) {
-      console.error("Erro na resposta da RapidAPI:", response.status, response.statusText);
-      return res.status(502).json({ error: "O provedor de dados não respondeu corretamente." });
+    const apiData = await response.json().catch(() => null);
+
+    // Se a API retornar erro HTTP ou resposta inválida
+    if (!response.ok || !apiData) {
+      console.error("Erro da RapidAPI:", response.status, apiData);
+      return res.status(502).json({ error: "Não foi possível carregar as informações deste perfil." });
     }
 
-    const apiData = await response.json();
+    // Procura o objeto com os dados do perfil na resposta da API
+    const user = apiData.data || apiData.user || apiData.result || apiData;
 
-    // Mapeia o retorno da API para a interface
-    const profile = apiData.data || apiData.user || {};
+    if (!user || user.status === "fail") {
+      return res.status(404).json({ error: "Perfil não encontrado ou privado." });
+    }
 
+    // Mapeia os dados reais para o padrão do front-end
     return res.json({
       success: true,
       profile: {
-        username: profile.username || username,
-        fullName: profile.full_name || profile.fullName || username,
-        biography: profile.biography || "Sem biografia.",
-        profilePic: profile.profile_pic_url || profile.profilePic || `https://ui-avatars.com/api/?name=${username}&background=833ab4&color=fff`,
-        postsCount: profile.media_count || profile.postsCount || 0,
-        followersCount: profile.follower_count || profile.followersCount || 0,
-        followingCount: profile.following_count || profile.followingCount || 0,
-        isPrivate: profile.is_private || false,
-        isVerified: profile.is_verified || false
+        username: user.username || username,
+        fullName: user.full_name || user.fullName || user.username || username,
+        biography: user.biography || "Sem biografia disponível.",
+        profilePic: user.profile_pic_url_hd || user.profile_pic_url || user.profilePic || `https://ui-avatars.com/api/?name=${username}&background=833ab4&color=fff`,
+        postsCount: user.media_count ?? user.postsCount ?? 0,
+        followersCount: user.follower_count ?? user.followersCount ?? 0,
+        followingCount: user.following_count ?? user.followingCount ?? 0,
+        isPrivate: user.is_private || false,
+        isVerified: user.is_verified || false
       },
       stories: [],
       posts: []
@@ -63,7 +68,7 @@ app.get("/api/profile", async (req, res) => {
 
   } catch (error) {
     console.error("Erro interno no servidor:", error);
-    return res.status(500).json({ error: "Erro ao consultar a API externa do Instagram." });
+    return res.status(500).json({ error: "Erro interno no servidor ao buscar dados." });
   }
 });
 
