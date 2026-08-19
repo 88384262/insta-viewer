@@ -66,11 +66,12 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    // 3. Tenta buscar os Stories usando o ID do usuário (se não for privado)
+    // 3. Tenta buscar os Stories (testando por username)
     let formattedStories = [];
-    if (!user.is_private && userId) {
+    if (!user.is_private) {
       try {
-        const storiesResponse = await fetch(`https://${apiHost}/stories?user_id=${userId}`, {
+        const storiesUrl = `https://${apiHost}/stories?username=${encodeURIComponent(username)}`;
+        const storiesResponse = await fetch(storiesUrl, {
           method: "GET",
           headers: {
             "x-rapidapi-host": apiHost,
@@ -95,7 +96,7 @@ app.get("/api/profile", async (req, res) => {
           }
         }
       } catch (e) {
-        console.log("Stories não disponíveis no momento para este perfil.");
+        console.log("Stories não retornados pela API.");
       }
     }
 
