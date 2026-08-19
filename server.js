@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-// Proxy para bypassar bloqueio de imagens do Instagram
+// Proxy para evitar bloqueios de CORS/referral do Instagram nas imagens/vídeos
 const proxify = (url) => {
   if (!url || typeof url !== "string") return "";
   if (url.includes("ui-avatars.com")) return url;
@@ -26,7 +26,7 @@ app.get("/api/profile", async (req, res) => {
     const hostLooter = "instagram-looter2.p.rapidapi.com";
     const hostBestExp = "instagram-best-experience.p.rapidapi.com";
 
-    // 1. Puxa dados do perfil via Instagram Looter (100% funcional)
+    // 1. Puxa perfil e feed pela API Looter (que já sabemos que funciona 100%)
     const profileRes = await fetch(`https://${hostLooter}/profile?username=${encodeURIComponent(username)}`, {
       method: "GET",
       headers: {
@@ -44,7 +44,7 @@ app.get("/api/profile", async (req, res) => {
     const user = apiData.data || apiData.user || apiData.result || apiData;
 
     if (!user || user.message === "Not found") {
-      return res.status(404).json({ error: "Perfil não encontrado no Instagram." });
+      return res.status(404).json({ error: "Perfil não encontrado." });
     }
 
     const userId = user.id || user.pk || user.rest_id;
@@ -68,11 +68,12 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    // 3. Tenta buscar Stories via Instagram Best Experience
+    // 3. Puxa os Stories na rota EXATA da Instagram Best Experience
     let formattedStories = [];
     if (!isPrivate && userId) {
       try {
-        const storiesRes = await fetch(`https://${hostBestExp}/stories?user_id=${userId}`, {
+        // Tentativa 1: Rota /user/stories (Padrão dessa API)
+        let storiesRes = await fetch(`https://${hostBestExp}/user/stories?user_id=${userId}`, {
           method: "GET",
           headers: {
             "x-rapidapi-host": hostBestExp,
@@ -80,13 +81,31 @@ app.get("/api/profile", async (req, res) => {
           }
         });
 
+        // Tentativa 2: Fallback se for /user-stories
+        if (!storiesRes.ok) {
+          storiesRes = await fetch(`https://${hostBestExp}/user-stories?user_id=${userId}`, {
+            method: "GET",
+            headers: {
+              "x-rapidapi-host": hostBestExp,
+              "x-rapidapi-key": apiKey
+            }
+          });
+        }
+
         if (storiesRes.ok) {
           const storiesData = await storiesRes.json().catch(() => null);
-          const items = storiesData?.data || storiesData?.items || storiesData?.result || [];
+          
+          // Mapeia onde quer que a lista de stories esteja no JSON retornado
+          const items = storiesData?.data?.items || storiesData?.data || storiesData?.items || storiesData?.reels || [];
 
           if (Array.isArray(items)) {
             formattedStories = items.map((story, i) => {
-              const mediaUrl = story.video_versions?.[0]?.url || story.image_versions2?.candidates?.[0]?.url || story.display_url || story.image_url;
+              const mediaUrl = 
+                story.video_versions?.[0]?.url || 
+                story.image_versions2?.candidates?.[0]?.url || 
+                story.display_url || 
+                story.image_url;
+
               return {
                 id: story.id || `story_${i}`,
                 type: story.video_versions ? "video" : "image",
@@ -97,7 +116,7 @@ app.get("/api/profile", async (req, res) => {
           }
         }
       } catch (e) {
-        console.log("Stories não carregados:", e.message);
+        console.log("Erro ao carregar stories da API secundária:", e.message);
       }
     }
 
@@ -125,7 +144,7 @@ app.get("/api/profile", async (req, res) => {
 
   } catch (error) {
     console.error("Erro interno:", error);
-    return res.status(500).json({ error: "Erro ao processar requisição." });
+    return res.status(500).json({ error: "Erro ao processar busca." });
   }
 });
 
