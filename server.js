@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-// Proxy para bypassar o bloqueio de mídias/CORS
+// Proxy para bypass de CORS/bloqueio de imagem do IG
 const proxify = (url) => {
   if (!url || typeof url !== "string") return "";
   if (url.includes("ui-avatars.com")) return url;
@@ -24,7 +24,7 @@ app.get("/api/profile", async (req, res) => {
 
     const apiKey = "fb6cd7e924msh9fe32786b6578cbp138615jsne52a772bf92f";
     const hostLooter = "instagram-looter2.p.rapidapi.com";
-    const hostBestExp = "instagram-best-experience.p.rapidapi.com";
+    const hostStories = "instagram-api-fast-reliable-data-scraper.p.rapidapi.com";
 
     // 1. Puxa perfil via Instagram Looter
     const profileRes = await fetch(`https://${hostLooter}/profile?username=${encodeURIComponent(username)}`, {
@@ -47,7 +47,6 @@ app.get("/api/profile", async (req, res) => {
       return res.status(404).json({ error: "Perfil não encontrado." });
     }
 
-    // Extrai o ID numérico exato
     const userId = String(user.pk || user.id || user.rest_id || "");
     const isPrivate = Boolean(user.is_private);
 
@@ -69,25 +68,27 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    // 3. Tenta buscar Stories
+    // 3. Puxa Stories Reais na nova API
     let formattedStories = [];
+
     if (!isPrivate && userId) {
       try {
-        const storiesRes = await fetch(`https://${hostBestExp}/user/stories?user_id=${userId}`, {
+        const storiesRes = await fetch(`https://${hostStories}/stories?user_id=${userId}`, {
           method: "GET",
           headers: {
-            "x-rapidapi-host": hostBestExp,
+            "x-rapidapi-host": hostStories,
             "x-rapidapi-key": apiKey
           }
         });
 
         if (storiesRes.ok) {
           const storiesData = await storiesRes.json().catch(() => null);
+
           const items = 
             storiesData?.data?.items || 
             storiesData?.items || 
             storiesData?.data || 
-            storiesData?.reels || 
+            storiesData?.result || 
             [];
 
           if (Array.isArray(items)) {
@@ -101,13 +102,11 @@ app.get("/api/profile", async (req, res) => {
                 url: proxify(video || image),
                 time: "Ativo"
               };
-            });
+            }).filter(s => Boolean(s.url));
           }
-        } else {
-          console.log("Erro na resposta de Stories:", storiesRes.status);
         }
       } catch (e) {
-        console.log("Falha ao consultar stories:", e.message);
+        console.error("Erro na busca de stories:", e.message);
       }
     }
 
