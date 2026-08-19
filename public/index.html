@@ -3,159 +3,174 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InstaView — Visualizador de Stories e Perfis do Instagram</title>
-  
+  <title>InstaAnon — Visualizador Anônimo de Perfil e Stories do Instagram</title>
+  <meta name="description" content="Assista Stories e veja fotos de perfis públicos do Instagram de forma anônima e sem precisar fazer login. Ferramenta online e gratuita.">
+
   <!-- 🟢 SCRIPT DO GOOGLE ADSENSE -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237631269397144"
-     crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237631269397144" crossorigin="anonymous"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: #0f172a; color: #f8fafc; line-height: 1.6; }
+
+    /* Header */
+    header { background: #1e293b; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 100; }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; padding: 15px 20px; }
+    .logo { color: #fff; font-weight: 800; font-size: 1.3rem; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .logo span { color: #ec4899; }
+    .badge-anon { background: rgba(236, 72, 153, 0.1); color: #f472b6; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(236, 72, 153, 0.2); }
+    nav { display: flex; gap: 20px; }
+    nav a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: 0.2s; }
+    nav a:hover { color: #ec4899; }
+
+    /* Main Container */
+    main { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+    .hero { text-align: center; margin-bottom: 40px; }
+    .hero-badge { display: inline-block; background: #334155; color: #cbd5e1; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 12px; margin-bottom: 15px; letter-spacing: 0.5px; }
+    .hero h1 { font-size: 2.3rem; font-weight: 800; margin-bottom: 12px; }
+    .hero h1 span { background: linear-gradient(135deg, #ec4899, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { color: #94a3b8; font-size: 1rem; max-width: 650px; margin: 0 auto; }
+
+    /* Search Box */
+    .search-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); margin-bottom: 50px; }
+    .search-box { display: flex; gap: 10px; margin-bottom: 15px; }
+    .input-wrapper { flex: 1; display: flex; align-items: center; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 0 15px; }
+    .input-wrapper .prefix { color: #64748b; font-weight: 700; margin-right: 5px; }
+    .input-wrapper input { width: 100%; background: transparent; border: none; padding: 14px 0; color: #fff; font-size: 1rem; outline: none; }
+    .btn-search { background: #ec4899; color: #fff; border: none; padding: 14px 25px; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+    .btn-search:hover { background: #db2777; }
+
+    /* Content Cards for SEO */
+    .info-section { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 35px; margin-bottom: 30px; }
+    .info-section h2 { color: #fff; font-size: 1.5rem; margin-bottom: 15px; font-weight: 700; border-left: 4px solid #ec4899; padding-left: 12px; }
+    .info-section p { color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem; }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+    .card-feature { background: #0f172a; padding: 20px; border-radius: 12px; border: 1px solid #334155; }
+    .card-feature h3 { color: #f472b6; font-size: 1.1rem; margin-bottom: 8px; }
+    .card-feature p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 0; }
+
+    /* FAQ */
+    .faq-item { border-bottom: 1px solid #334155; padding: 15px 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item h3 { color: #f1f5f9; font-size: 1.05rem; margin-bottom: 5px; }
+    .faq-item p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 0; }
+
+    /* Footer */
+    footer { background: #0b0f19; border-top: 1px solid #1e293b; text-align: center; padding: 30px 20px; color: #64748b; font-size: 0.85rem; margin-top: 60px; }
+    footer a { color: #94a3b8; text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: #ec4899; }
+    .disclaimer { font-size: 0.75rem; color: #475569; max-width: 700px; margin: 15px auto 0; }
+
+    @media (max-width: 600px) {
+      nav { display: none; }
+      .search-box { flex-direction: column; }
+      .hero h1 { font-size: 1.8rem; }
+    }
+  </style>
 </head>
 <body>
-  <!-- Header / Navbar -->
-  <header class="navbar">
+
+  <!-- Header -->
+  <header>
     <div class="nav-container">
       <a href="/" class="logo">
-        <div class="logo-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-        </div>
-        <span>Insta<strong>Anon</strong></span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        Insta<span>Anon</span>
       </a>
+      <nav>
+        <a href="#como-funciona">Como Funciona</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#faq">FAQ</a>
+      </nav>
       <div class="badge-anon">
-        <span class="dot"></span> 100% Anônimo & Seguro
+        100% Anônimo
       </div>
     </div>
   </header>
 
-  <main class="main-content">
-    <!-- Hero Section / Busca -->
-    <section class="hero-section">
-      <div class="hero-badge">VISUALIZADOR DE PERFIS E STORIES</div>
-      <h1>Assista Stories e Perfis do Instagram <span class="gradient-text">Anônimamente</span></h1>
-      <p class="hero-desc">Insira o nome de usuário para ver Stories, fotos, publicações e informações do perfil sem precisar fazer login.</p>
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">FERRAMENTA DE CONSULTA PÚBLICA</div>
+      <h1>Visualizar Perfis e Stories <br><span>sem Fazer Login</span></h1>
+      <p>Consulte dados de contas públicas, número de seguidores, publicações recentes e bios com facilidade e privacidade.</p>
+    </section>
 
+    <!-- Search Form -->
+    <div class="search-card">
       <form id="searchForm" class="search-box">
         <div class="input-wrapper">
           <span class="prefix">@</span>
-          <input type="text" id="usernameInput" placeholder="digite o usuário (ex: reaviv_fisio)" autocomplete="off" required />
+          <input type="text" id="usernameInput" placeholder="digite o usuário (ex: instagram)" required />
         </div>
-        <button type="submit" id="searchBtn">
-          <span>Buscar Perfil</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
+        <button type="submit" class="btn-search">Buscar Perfil</button>
       </form>
-
-      <div class="quick-examples">
-        <span>Sugestões:</span>
-        <button class="ex-btn" data-user="reaviv_fisio">@reaviv_fisio</button>
-        <button class="ex-btn" data-user="instagram">@instagram</button>
-        <button class="ex-btn" data-user="perfil.fechado">@perfil.fechado (Demonstração Privado)</button>
-      </div>
-    </section>
-
-    <!-- Estado de Carregamento -->
-    <div id="loader" class="loader-container hidden">
-      <div class="spinner"></div>
-      <p>Buscando informações do perfil no Instagram...</p>
     </div>
 
-    <!-- Mensagem de Erro -->
-    <div id="errorMessage" class="error-card hidden"></div>
+    <!-- 🟢 CONTEÚDO EDITORIAL PARA O GOOGLE ADSENSE -->
 
-    <!-- Resultados / Perfil -->
-    <section id="profileResult" class="profile-container hidden">
-      <!-- Card do Perfil Cabeçalho -->
-      <div class="profile-card">
-        <div class="avatar-wrapper">
-          <img id="profilePic" src="" alt="Foto de Perfil" />
-          <div id="storyRing" class="story-ring"></div>
+    <!-- Seção 1: Como Funciona -->
+    <article class="info-section" id="como-funciona">
+      <h2>Como funciona a busca de perfis públicos?</h2>
+      <p>O <strong>InstaAnon</strong> é um mecanismo de busca de informações públicas que organiza dados disponíveis abertamente na web. Ele permite consultar métricas básicas de contas do Instagram, como nome do usuário, biografia, contagem de publicações e número de seguidores.</p>
+      <p>Nossa plataforma não exige que você conecte suas contas de redes sociais ou forneça credenciais de acesso. O objetivo é fornecer uma interface leve para leitura rápida de informações públicas.</p>
+    </article>
+
+    <!-- Seção 2: Recursos & Privacidade -->
+    <article class="info-section" id="recursos">
+      <h2>Segurança, Anonymato e Privacidade</h2>
+      <div class="info-grid">
+        <div class="card-feature">
+          <h3>Sem Login Requerido</h3>
+          <p>Você nunca precisará inserir sua senha ou dados pessoais para utilizar nossa ferramenta de busca.</p>
         </div>
-
-        <div class="profile-info">
-          <div class="user-header">
-            <h2 id="usernameHeader">@usuario</h2>
-            <span id="verifiedBadge" class="verified-badge hidden" title="Perfil Verificado">✓</span>
-            <span id="privacyBadge" class="privacy-badge">Público</span>
-          </div>
-          <h3 id="fullName">Nome Completo</h3>
-          <p id="biography" class="bio-text"></p>
-
-          <div class="stats-row">
-            <div class="stat-item">
-              <strong id="postsCount">0</strong>
-              <span>Publicações</span>
-            </div>
-            <div class="stat-item">
-              <strong id="followersCount">0</strong>
-              <span>Seguidores</span>
-            </div>
-            <div class="stat-item">
-              <strong id="followingCount">0</strong>
-              <span>Seguindo</span>
-            </div>
-          </div>
+        <div class="card-feature">
+          <h3>Respeito aos Perfis Privados</h3>
+          <p>Em conformidade com as diretrizes de privacidade, a ferramenta funciona exclusivamente com contas configuradas como públicas.</p>
+        </div>
+        <div class="card-feature">
+          <h3>Acesso Rápido</h3>
+          <p>Otimizado para funcionar de maneira leve em dispositivos móveis (Android/iOS) e computadores.</p>
         </div>
       </div>
+    </article>
 
-      <!-- Alerta de Perfil Privado -->
-      <div id="privateNotice" class="private-notice hidden">
-        <div class="lock-icon">🔒</div>
-        <h3>Este Perfil é Privado</h3>
-        <p>O Instagram protege o conteúdo de contas fechadas. Apenas seguidores autorizados pela conta conseguem visualizar as fotos e os stories.</p>
+    <!-- Seção 3: Perguntas Frequentes (FAQ) -->
+    <article class="info-section" id="faq">
+      <h2>Perguntas Frequentes (FAQ)</h2>
+
+      <div class="faq-item">
+        <h3>É possível ver perfis privados?</h3>
+        <p>Não. Respeitamos as diretrizes de privacidade de dados. Apenas informações de perfis configurados como "Público" pelos próprios detentores das contas podem ser exibidas.</p>
       </div>
 
-      <!-- Conteúdo do Perfil (Abas) -->
-      <div id="publicContent" class="tabs-container">
-        <div class="tab-buttons">
-          <button class="tab-btn active" data-tab="storiesTab">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
-            Stories Ativos <span id="storiesBadgeCount" class="tab-count">0</span>
-          </button>
-          <button class="tab-btn" data-tab="postsTab">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-            Publicações <span id="postsBadgeCount" class="tab-count">0</span>
-          </button>
-        </div>
-
-        <!-- Conteúdo Aba Stories -->
-        <div id="storiesTab" class="tab-content active">
-          <div id="storiesGrid" class="stories-grid"></div>
-        </div>
-
-        <!-- Conteúdo Aba Publicações -->
-        <div id="postsTab" class="tab-content hidden">
-          <div id="postsGrid" class="posts-grid"></div>
-        </div>
+      <div class="faq-item">
+        <h3>O dono do perfil saberá que pesquisei a conta dele?</h3>
+        <p>Não. A busca utiliza requisições públicas de dados sem vínculo com contas pessoais de usuários.</p>
       </div>
-    </section>
+
+      <div class="faq-item">
+        <h3>A ferramenta é totalmente gratuita?</h3>
+        <p>Sim. O serviço é mantido através de exibições publicitárias discretas e é 100% gratuito para o usuário final.</p>
+      </div>
+    </article>
   </main>
 
-  <!-- Modal para Visualização e Download de Mídia -->
-  <div id="mediaModal" class="modal-overlay hidden">
-    <div class="modal-content">
-      <button id="closeModal" class="modal-close">&times;</button>
-      <div class="modal-body">
-        <img id="modalImg" src="" alt="Mídia em Alta Resolução" />
-      </div>
-      <div class="modal-footer">
-        <a id="downloadBtn" href="" download target="_blank" class="download-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          Baixar Imagem
-        </a>
-      </div>
-    </div>
-  </div>
-
   <footer>
-    <div class="footer-container">
-      <p><strong>InstaAnon</strong> é uma ferramenta independente de consulta pública.</p>
-      <p class="disclaimer">Este site não possui vínculo, afiliação ou patrocínio com o Instagram ou Meta Inc. Respeitamos todas as diretrizes de privacidade do Instagram.</p>
-    </div>
+    <p>© 2026 InstaAnon — Ferramenta independente de consulta e utilidade pública.</p>
+    <p style="margin-top: 10px;">
+      <a href="#como-funciona">Como Funciona</a> | 
+      <a href="#recursos">Recursos</a> | 
+      <a href="#faq">FAQ</a>
+    </p>
+    <p class="disclaimer">
+      <strong>Isenção de Responsabilidade:</strong> Este site não é afiliado, patrocinado ou endossado pelo Instagram ou Meta Platforms, Inc. Todas as marcas registradas pertencem aos seus respectivos proprietários.
+    </p>
   </footer>
 
-  <script src="/script.js"></script>
 </body>
 </html>
