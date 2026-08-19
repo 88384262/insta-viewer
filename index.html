@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InstaView — Visualizador de Stories e Perfis do Instagram</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Header / Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </div>
+        <span>Insta<strong>Anon</strong></span>
+      </a>
+      <div class="badge-anon">
+        <span class="dot"></span> 100% Anônimo & Seguro
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Hero Section / Busca -->
+    <section class="hero-section">
+      <div class="hero-badge">VISUALIZADOR DE PERFIS E STORIES</div>
+      <h1>Assista Stories e Perfis do Instagram <span class="gradient-text">Anônimamente</span></h1>
+      <p class="hero-desc">Insira o nome de usuário para ver Stories, fotos, publicações e informações do perfil sem precisar fazer login.</p>
+
+      <form id="searchForm" class="search-box">
+        <div class="input-wrapper">
+          <span class="prefix">@</span>
+          <input type="text" id="usernameInput" placeholder="digite o usuário (ex: reaviv_fisio)" autocomplete="off" required />
+        </div>
+        <button type="submit" id="searchBtn">
+          <span>Buscar Perfil</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </form>
+
+      <div class="quick-examples">
+        <span>Sugestões:</span>
+        <button class="ex-btn" data-user="reaviv_fisio">@reaviv_fisio</button>
+        <button class="ex-btn" data-user="instagram">@instagram</button>
+        <button class="ex-btn" data-user="perfil.fechado">@perfil.fechado (Demonstração Privado)</button>
+      </div>
+    </section>
+
+    <!-- Estado de Carregamento -->
+    <div id="loader" class="loader-container hidden">
+      <div class="spinner"></div>
+      <p>Buscando informações do perfil no Instagram...</p>
+    </div>
+
+    <!-- Mensagem de Erro -->
+    <div id="errorMessage" class="error-card hidden"></div>
+
+    <!-- Resultados / Perfil -->
+    <section id="profileResult" class="profile-container hidden">
+      <!-- Card do Perfil Cabeçalho -->
+      <div class="profile-card">
+        <div class="avatar-wrapper">
+          <img id="profilePic" src="" alt="Foto de Perfil" />
+          <div id="storyRing" class="story-ring"></div>
+        </div>
+
+        <div class="profile-info">
+          <div class="user-header">
+            <h2 id="usernameHeader">@usuario</h2>
+            <span id="verifiedBadge" class="verified-badge hidden" title="Perfil Verificado">✓</span>
+            <span id="privacyBadge" class="privacy-badge">Público</span>
+          </div>
+          <h3 id="fullName">Nome Completo</h3>
+          <p id="biography" class="bio-text"></p>
+
+          <div class="stats-row">
+            <div class="stat-item">
+              <strong id="postsCount">0</strong>
+              <span>Publicações</span>
+            </div>
+            <div class="stat-item">
+              <strong id="followersCount">0</strong>
+              <span>Seguidores</span>
+            </div>
+            <div class="stat-item">
+              <strong id="followingCount">0</strong>
+              <span>Seguindo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta de Perfil Privado -->
+      <div id="privateNotice" class="private-notice hidden">
+        <div class="lock-icon">🔒</div>
+        <h3>Este Perfil é Privado</h3>
+        <p>O Instagram protege o conteúdo de contas fechadas. Apenas seguidores autorizados pela conta conseguem visualizar as fotos e os stories.</p>
+      </div>
+
+      <!-- Conteúdo do Perfil (Abas) -->
+      <div id="publicContent" class="tabs-container">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="storiesTab">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+            Stories Ativos <span id="storiesBadgeCount" class="tab-count">0</span>
+          </button>
+          <button class="tab-btn" data-tab="postsTab">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            Publicações <span id="postsBadgeCount" class="tab-count">0</span>
+          </button>
+        </div>
+
+        <!-- Conteúdo Aba Stories -->
+        <div id="storiesTab" class="tab-content active">
+          <div id="storiesGrid" class="stories-grid"></div>
+        </div>
+
+        <!-- Conteúdo Aba Publicações -->
+        <div id="postsTab" class="tab-content hidden">
+          <div id="postsGrid" class="posts-grid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal para Visualização e Download de Mídia -->
+  <div id="mediaModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <button id="closeModal" class="modal-close">&times;</button>
+      <div class="modal-body">
+        <img id="modalImg" src="" alt="Mídia em Alta Resolução" />
+      </div>
+      <div class="modal-footer">
+        <a id="downloadBtn" href="" download target="_blank" class="download-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Baixar Imagem
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <p><strong>InstaAnon</strong> é uma ferramenta independente de consulta pública.</p>
+      <p class="disclaimer">Este site não possui vínculo, afiliação ou patrocínio com o Instagram ou Meta Inc. Respeitamos todas as diretrizes de privacidade do Instagram.</p>
+    </div>
+  </footer>
+
+  <script src="/script.js"></script>
+</body>
+</html>
