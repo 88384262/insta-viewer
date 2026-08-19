@@ -132,7 +132,7 @@
       </div>
     </section>
 
-    <!-- 🟢 SEÇÃO EDITORIAL MASSIVA (VALOR AGREGADO PARA O GOOGLE ADSENSE) -->
+    <!-- 🟢 SEÇÃO EDITORIAL (VALOR AGREGADO) -->
     <section class="seo-articles" style="margin-top: 60px; display: flex; flex-direction: column; gap: 30px;">
       
       <article class="article-card" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; color: #a1a1aa; line-height: 1.8;">
@@ -165,28 +165,23 @@
 
       <article class="article-card" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; color: #a1a1aa; line-height: 1.8;">
         <h2 style="color: #fff; font-size: 1.6rem; margin-bottom: 15px;">Perguntas Frequentes (FAQ)</h2>
-        
         <div style="margin-bottom: 20px;">
           <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">1. É preciso pagar para usar o InstaAnon?</h3>
           <p>Não. A ferramenta é 100% gratuita para utilização individual, sem cobranças escondidas ou limites rígidos de pesquisa por dia.</p>
         </div>
-
         <div style="margin-bottom: 20px;">
           <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">2. O dono do perfil recebe alguma notificação?</h3>
           <p>Não. Como a consulta é realizada através de requisições de dados abertos sem conta associada, a plataforma do Instagram não vincula a visualização a nenhum usuário específico.</p>
         </div>
-
         <div style="margin-bottom: 20px;">
           <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">3. Posso usar a ferramenta pelo celular?</h3>
           <p>Sim. O layout do site é totalmente responsivo e adaptado para funcionar com fluidez em smartphones Android, iPhones (iOS), tablets e computadores de mesa.</p>
         </div>
-
         <div>
           <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">4. Por que alguns Stories não aparecem?</h3>
           <p>Stories expiram automaticamente após 24 horas da publicação. Se o perfil não tiver feito postagens recentes no formato de Story dentro desse intervalo, a aba exibirá zero mídias ativas.</p>
         </div>
       </article>
-
     </section>
   </main>
 
@@ -206,9 +201,54 @@
     </div>
   </div>
 
+  <!-- 🟢 MODAL: POLÍTICA DE PRIVACIDADE (EXIGÊNCIA ADSENSE) -->
+  <div id="privacyModal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 600px; padding: 25px; color: #cbd5e1; text-align: left; max-height: 80vh; overflow-y: auto;">
+      <button onclick="document.getElementById('privacyModal').classList.add('hidden')" class="modal-close">&times;</button>
+      <h2 style="color: #fff; margin-bottom: 15px;">Política de Privacidade</h2>
+      <p style="margin-bottom: 10px;">A sua privacidade é importante para nós. É política do InstaAnon respeitar a sua privacidade em relação a qualquer informação que possamos coletar no site.</p>
+      <h3 style="color: #fff; margin: 15px 0 5px;">Cookies e Anúncios do Google AdSense</h3>
+      <p style="margin-bottom: 10px;">O Google, como fornecedor de terceiros, utiliza cookies para exibir anúncios em nosso site. Com o cookie DART, o Google pode exibir anúncios para os usuários com base nas visitas feitas a este e a outros sites na Internet.</p>
+      <p style="margin-bottom: 10px;">Os usuários podem desativar o uso do cookie DART visitando a Política de Privacidade da rede de conteúdo e anúncios do Google.</p>
+      <h3 style="color: #fff; margin: 15px 0 5px;">Coleta de Dados</h3>
+      <p>Não solicitamos dados pessoais como senhas, e-mails ou números de telefone. As consultas de nomes de usuário são anônimas e descartadas ao fechar a página.</p>
+    </div>
+  </div>
+
+  <!-- 🟢 MODAL: TERMOS DE USO (EXIGÊNCIA ADSENSE) -->
+  <div id="termsModal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 600px; padding: 25px; color: #cbd5e1; text-align: left; max-height: 80vh; overflow-y: auto;">
+      <button onclick="document.getElementById('termsModal').classList.add('hidden')" class="modal-close">&times;</button>
+      <h2 style="color: #fff; margin-bottom: 15px;">Termos de Uso</h2>
+      <p style="margin-bottom: 10px;">Ao acessar o site InstaAnon, você concorda em cumprir estes termos de serviço, todas as leis e regulamentos aplicáveis.</p>
+      <h3 style="color: #fff; margin: 15px 0 5px;">Isenção de Responsabilidade e Licença</h3>
+      <p style="margin-bottom: 10px;">O InstaAnon atua estritamente como um indexador e buscador de dados públicos já disponibilizados abertamente na internet. Não armazenamos, hospedamos ou contornamos barreiras de privacidade de conteúdos protegidos.</p>
+      <p>Esta ferramenta é destinada exclusivamente para uso pessoal e informativo em perfis públicos.</p>
+    </div>
+  </div>
+
+  <!-- 🟢 MODAL: CONTATO (EXIGÊNCIA ADSENSE) -->
+  <div id="contactModal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 500px; padding: 25px; color: #cbd5e1; text-align: left;">
+      <button onclick="document.getElementById('contactModal').classList.add('hidden')" class="modal-close">&times;</button>
+      <h2 style="color: #fff; margin-bottom: 15px;">Fale Conosco</h2>
+      <p style="margin-bottom: 15px;">Tem dúvidas, sugestões de melhorias ou solicitações de suporte? Entre em contato com a nossa equipe através do e-mail abaixo:</p>
+      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+        <strong style="color: #ec4899; font-size: 1.1rem;">contato@instaanon.com</strong>
+      </div>
+      <p style="margin-top: 15px; font-size: 0.85rem; color: #94a3b8;">Respondemos a todas as solicitações dentro do prazo de até 48 horas úteis.</p>
+    </div>
+  </div>
+
+  <!-- Footer com Links Obrigatórios -->
   <footer>
     <div class="footer-container">
       <p><strong>InstaAnon</strong> é uma ferramenta independente de consulta pública.</p>
+      <p style="margin: 10px 0;">
+        <a href="javascript:void(0)" onclick="document.getElementById('privacyModal').classList.remove('hidden')" style="color: #ec4899; text-decoration: none; margin: 0 8px;">Política de Privacidade</a> | 
+        <a href="javascript:void(0)" onclick="document.getElementById('termsModal').classList.remove('hidden')" style="color: #ec4899; text-decoration: none; margin: 0 8px;">Termos de Uso</a> | 
+        <a href="javascript:void(0)" onclick="document.getElementById('contactModal').classList.remove('hidden')" style="color: #ec4899; text-decoration: none; margin: 0 8px;">Contato</a>
+      </p>
       <p class="disclaimer">Este site não possui vínculo, afiliação ou patrocínio com o Instagram ou Meta Inc. Respeitamos todas as diretrizes de privacidade do Instagram.</p>
     </div>
   </footer>
