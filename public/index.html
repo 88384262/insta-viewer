@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDFConvert — Conversor de TXT e Imagem para PDF Online e Grátis</title>
-
+  <title>InstaView — Visualizador de Stories e Perfis do Instagram</title>
+  
   <!-- 🟢 SCRIPT DO GOOGLE ADSENSE -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237631269397144"
      crossorigin="anonymous"></script>
@@ -15,115 +15,144 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <!-- Header / Navbar com Menu Institucional -->
+  <!-- Header / Navbar -->
   <header class="navbar">
-    <div class="nav-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; padding: 15px 20px;">
-      <a href="/" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #fff; font-weight: 700; font-size: 1.2rem;">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        <span>PDF<strong>Convert</strong></span>
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </div>
+        <span>Insta<strong>Anon</strong></span>
       </a>
-
-      <!-- MENU DE NAVEGAÇÃO ADSENSE -->
-      <nav style="display: flex; gap: 20px; align-items: center;">
-        <a href="#converter" style="color: #a1a1aa; text-decoration: none; font-size: 0.9rem; font-weight: 500;">Converter</a>
-        <a href="#como-funciona" style="color: #a1a1aa; text-decoration: none; font-size: 0.9rem; font-weight: 500;">Como Funciona</a>
-        <a href="#recursos" style="color: #a1a1aa; text-decoration: none; font-size: 0.9rem; font-weight: 500;">Recursos</a>
-        <a href="#faq" style="color: #a1a1aa; text-decoration: none; font-size: 0.9rem; font-weight: 500;">FAQ</a>
-      </nav>
-
-      <div style="background: rgba(34,197,94,0.1); color: #4ade80; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
-        🟢 100% Grátis & Seguro
+      <div class="badge-anon">
+        <span class="dot"></span> 100% Anônimo & Seguro
       </div>
     </div>
   </header>
 
   <main class="main-content">
-    <!-- Hero / Área do Conversor -->
-    <section id="converter" class="hero-section" style="text-align: center; padding: 40px 20px;">
-      <h1 style="font-size: 2.2rem; color: #fff; margin-bottom: 15px;">Converter TXT e Imagens em <span class="gradient-text" style="color: #6366f1;">PDF Online</span></h1>
-      <p class="hero-desc" style="color: #a1a1aa; max-width: 600px; margin: 0 auto 30px;">Transforme arquivos de texto, imagens ou cole seu texto diretamente para gerar documentos PDF instantaneamente.</p>
+    <!-- Hero Section / Busca -->
+    <section class="hero-section">
+      <div class="hero-badge">VISUALIZADOR DE PERFIS E STORIES</div>
+      <h1>Assista Stories e Perfis do Instagram <span class="gradient-text">Anônimamente</span></h1>
+      <p class="hero-desc">Insira o nome de usuário para ver Stories, fotos, publicações e informações do perfil sem precisar fazer login.</p>
 
-      <!-- 🛠️ FERRAMENTA COMPLETA -->
-      <div id="converterApp" style="max-width: 650px; margin: 0 auto; background: rgba(255, 255, 255, 0.04); padding: 30px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: left;">
-        
-        <!-- OPÇÃO 1: Upload de Arquivos -->
-        <div style="margin-bottom: 20px;">
-          <label style="display: block; color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem;">1. Selecione ou arraste um arquivo (.txt, .jpg, .png):</label>
-          <div id="dropArea" style="border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 25px 20px; cursor: pointer; text-align: center; background: rgba(0,0,0,0.2);" onclick="document.getElementById('fileInput').click()">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" style="margin-bottom: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            <p style="color: #fff; font-weight: 600; margin-bottom: 4px; font-size: 0.9rem;">Clique para escolher um arquivo</p>
-            <span style="color: #71717a; font-size: 0.8rem;">Suporta arquivos TXT e Imagens (JPG, PNG)</span>
-            <input type="file" id="fileInput" accept=".txt, image/*" style="display: none;" />
-          </div>
-          <div id="fileName" style="margin-top: 8px; color: #4ade80; font-size: 0.85rem; font-weight: 500;"></div>
+      <form id="searchForm" class="search-box">
+        <div class="input-wrapper">
+          <span class="prefix">@</span>
+          <input type="text" id="usernameInput" placeholder="digite o usuário (ex: reaviv_fisio)" autocomplete="off" required />
         </div>
-
-        <div style="text-align: center; color: #71717a; margin: 15px 0; font-size: 0.85rem; font-weight: 600;">— OU COLE O TEXTO ABAIXO —</div>
-
-        <!-- OPÇÃO 2: Caixa para Colar o Texto Direto -->
-        <div style="margin-bottom: 20px;">
-          <label for="textInput" style="display: block; color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem;">2. Cole seu texto aqui para converter na hora:</label>
-          <textarea id="textInput" rows="6" placeholder="Digite ou cole aqui o conteúdo do seu documento..." style="width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; color: #fff; font-family: inherit; font-size: 0.9rem; resize: vertical; box-sizing: border-box;"></textarea>
-        </div>
-
-        <!-- Botão de Ação -->
-        <button id="convertBtn" style="background: #6366f1; color: #fff; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; width: 100%; transition: 0.2s;">
-          Gerar e Baixar PDF
+        <button type="submit" id="searchBtn">
+          <span>Buscar Perfil</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </button>
+      </form>
 
+      <div class="quick-examples">
+        <span>Sugestões:</span>
+        <button class="ex-btn" data-user="reaviv_fisio">@reaviv_fisio</button>
+        <button class="ex-btn" data-user="instagram">@instagram</button>
+        <button class="ex-btn" data-user="perfil.fechado">@perfil.fechado (Demonstração Privado)</button>
       </div>
     </section>
 
-    <!-- 🟢 CONTEÚDO EDITORIAL PARA APROVAÇÃO ADSENSE -->
-    <section class="seo-content-section" style="max-width: 900px; margin: 60px auto 20px; padding: 0 20px; color: #a1a1aa; line-height: 1.7; font-size: 0.95rem;">
-      
-      <article id="como-funciona" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
-        <h2 style="color: #fff; font-size: 1.5rem; margin-bottom: 15px;">Como Converter TXT e Imagens para PDF?</h2>
-        <p style="margin-bottom: 15px;">Nossa ferramenta web foi desenvolvida para simplificar a criação de documentos PDF a partir de textos simples, arquivos locais ou colando mensagens diretamente na caixa de texto. O processo é totalmente automatizado:</p>
-        <ol style="margin-left: 20px; margin-bottom: 15px;">
-          <li style="margin-bottom: 8px;"><strong>Escolha a entrada:</strong> Selecione um arquivo (.txt ou imagem) do seu dispositivo ou simplesmente cole o texto copiado no campo.</li>
-          <li style="margin-bottom: 8px;"><strong>Conversão Instantânea:</strong> A ferramenta formata automaticamente o texto e as imagens no layout oficial de documento PDF.</li>
-          <li style="margin-bottom: 8px;"><strong>Baixe o PDF:</strong> Clique no botão para realizar o download imediato do arquivo gerado.</li>
-        </ol>
-      </article>
+    <!-- Estado de Carregamento -->
+    <div id="loader" class="loader-container hidden">
+      <div class="spinner"></div>
+      <p>Buscando informações do perfil no Instagram...</p>
+    </div>
 
-      <article id="recursos" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
-        <h2 style="color: #fff; font-size: 1.5rem; margin-bottom: 15px;">Segurança e Privacidade dos Seus Documentos</h2>
-        <p style="margin-bottom: 15px;">A privacidade dos seus dados é a nossa prioridade. Todo o processamento de conversão ocorre diretamente no seu próprio navegador de forma temporária. Não armazenamos nem salvamos o conteúdo dos seus textos e arquivos em nossos servidores.</p>
-        <p>Assim que o arquivo PDF é baixado, as informações temporárias são completamente apagadas da memória do navegador.</p>
-      </article>
+    <!-- Mensagem de Erro -->
+    <div id="errorMessage" class="error-card hidden"></div>
 
-      <article id="faq" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
-        <h2 style="color: #fff; font-size: 1.5rem; margin-bottom: 20px;">Perguntas Frequentes (FAQ)</h2>
-        
-        <div style="margin-bottom: 20px;">
-          <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">1. A conversão de arquivos é gratuita?</h3>
-          <p>Sim, o serviço é 100% gratuito, sem limite diário e sem necessidade de cadastro.</p>
+    <!-- Resultados / Perfil -->
+    <section id="profileResult" class="profile-container hidden">
+      <!-- Card do Perfil Cabeçalho -->
+      <div class="profile-card">
+        <div class="avatar-wrapper">
+          <img id="profilePic" src="" alt="Foto de Perfil" />
+          <div id="storyRing" class="story-ring"></div>
         </div>
 
-        <div style="margin-bottom: 20px;">
-          <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">2. Posso colar textos longos?</h3>
-          <p>Sim! Você pode colar qualquer tamanho de texto na caixa dedicada e o conversor criará as páginas do PDF adequadamente.</p>
+        <div class="profile-info">
+          <div class="user-header">
+            <h2 id="usernameHeader">@usuario</h2>
+            <span id="verifiedBadge" class="verified-badge hidden" title="Perfil Verificado">✓</span>
+            <span id="privacyBadge" class="privacy-badge">Público</span>
+          </div>
+          <h3 id="fullName">Nome Completo</h3>
+          <p id="biography" class="bio-text"></p>
+
+          <div class="stats-row">
+            <div class="stat-item">
+              <strong id="postsCount">0</strong>
+              <span>Publicações</span>
+            </div>
+            <div class="stat-item">
+              <strong id="followersCount">0</strong>
+              <span>Seguidores</span>
+            </div>
+            <div class="stat-item">
+              <strong id="followingCount">0</strong>
+              <span>Seguindo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta de Perfil Privado -->
+      <div id="privateNotice" class="private-notice hidden">
+        <div class="lock-icon">🔒</div>
+        <h3>Este Perfil é Privado</h3>
+        <p>O Instagram protege o conteúdo de contas fechadas. Apenas seguidores autorizados pela conta conseguem visualizar as fotos e os stories.</p>
+      </div>
+
+      <!-- Conteúdo do Perfil (Abas) -->
+      <div id="publicContent" class="tabs-container">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="storiesTab">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+            Stories Ativos <span id="storiesBadgeCount" class="tab-count">0</span>
+          </button>
+          <button class="tab-btn" data-tab="postsTab">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            Publicações <span id="postsBadgeCount" class="tab-count">0</span>
+          </button>
         </div>
 
-        <div>
-          <h3 style="color: #e4e4e7; font-size: 1.1rem; margin-bottom: 5px;">3. Funciona em celulares?</h3>
-          <p>Sim! O site é responsivo para navegadores de celulares Android, iPhone e computadores.</p>
+        <!-- Conteúdo Aba Stories -->
+        <div id="storiesTab" class="tab-content active">
+          <div id="storiesGrid" class="stories-grid"></div>
         </div>
-      </article>
 
+        <!-- Conteúdo Aba Publicações -->
+        <div id="postsTab" class="tab-content hidden">
+          <div id="postsGrid" class="posts-grid"></div>
+        </div>
+      </div>
     </section>
   </main>
 
+  <!-- Modal para Visualização e Download de Mídia -->
+  <div id="mediaModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <button id="closeModal" class="modal-close">&times;</button>
+      <div class="modal-body">
+        <img id="modalImg" src="" alt="Mídia em Alta Resolução" />
+      </div>
+      <div class="modal-footer">
+        <a id="downloadBtn" href="" download target="_blank" class="download-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Baixar Imagem
+        </a>
+      </div>
+    </div>
+  </div>
+
   <footer>
-    <div class="footer-container" style="text-align: center; padding: 30px 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.85rem; color: #71717a;">
-      <p style="margin-bottom: 10px;"><strong>PDFConvert</strong> — Ferramenta Gratuita de Conversão Online de Documentos.</p>
-      <p style="margin-bottom: 15px;">Respeitamos a privacidade do usuário. Nenhum arquivo é armazenado em nossos servidores.</p>
-      <p>
-        <a href="#converter" style="color: #a1a1aa; text-decoration: underline; margin: 0 10px;">Início</a> | 
-        <a href="#como-funciona" style="color: #a1a1aa; text-decoration: underline; margin: 0 10px;">Como Funciona</a> | 
-        <a href="#recursos" style="color: #a1a1aa; text-decoration: underline; margin: 0 10px;">Privacidade</a>
-      </p>
+    <div class="footer-container">
+      <p><strong>InstaAnon</strong> é uma ferramenta independente de consulta pública.</p>
+      <p class="disclaimer">Este site não possui vínculo, afiliação ou patrocínio com o Instagram ou Meta Inc. Respeitamos todas as diretrizes de privacidade do Instagram.</p>
     </div>
   </footer>
 
