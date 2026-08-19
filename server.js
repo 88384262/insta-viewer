@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-// Proxy para evitar bloqueios de CORS/referral do Instagram nas imagens/vídeos
+// Proxy para bypassar o bloqueio de mídias/CORS
 const proxify = (url) => {
   if (!url || typeof url !== "string") return "";
   if (url.includes("ui-avatars.com")) return url;
@@ -26,7 +26,7 @@ app.get("/api/profile", async (req, res) => {
     const hostLooter = "instagram-looter2.p.rapidapi.com";
     const hostBestExp = "instagram-best-experience.p.rapidapi.com";
 
-    // 1. Puxa perfil e feed pela API Looter (que já sabemos que funciona 100%)
+    // 1. Puxa perfil via Instagram Looter
     const profileRes = await fetch(`https://${hostLooter}/profile?username=${encodeURIComponent(username)}`, {
       method: "GET",
       headers: {
@@ -47,10 +47,11 @@ app.get("/api/profile", async (req, res) => {
       return res.status(404).json({ error: "Perfil não encontrado." });
     }
 
-    const userId = user.id || user.pk || user.rest_id;
+    // Extrai o ID numérico exato
+    const userId = String(user.pk || user.id || user.rest_id || "");
     const isPrivate = Boolean(user.is_private);
 
-    // 2. Processa Posts do Feed
+    // 2. Processa Posts
     let formattedPosts = [];
     const rawPosts = user.edge_owner_to_timeline_media?.edges || user.posts || user.media || [];
 
@@ -68,12 +69,11 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    // 3. Puxa os Stories na rota EXATA da Instagram Best Experience
+    // 3. Tenta buscar Stories
     let formattedStories = [];
     if (!isPrivate && userId) {
       try {
-        // Tentativa 1: Rota /user/stories (Padrão dessa API)
-        let storiesRes = await fetch(`https://${hostBestExp}/user/stories?user_id=${userId}`, {
+        const storiesRes = await fetch(`https://${hostBestExp}/user/stories?user_id=${userId}`, {
           method: "GET",
           headers: {
             "x-rapidapi-host": hostBestExp,
@@ -81,42 +81,33 @@ app.get("/api/profile", async (req, res) => {
           }
         });
 
-        // Tentativa 2: Fallback se for /user-stories
-        if (!storiesRes.ok) {
-          storiesRes = await fetch(`https://${hostBestExp}/user-stories?user_id=${userId}`, {
-            method: "GET",
-            headers: {
-              "x-rapidapi-host": hostBestExp,
-              "x-rapidapi-key": apiKey
-            }
-          });
-        }
-
         if (storiesRes.ok) {
           const storiesData = await storiesRes.json().catch(() => null);
-          
-          // Mapeia onde quer que a lista de stories esteja no JSON retornado
-          const items = storiesData?.data?.items || storiesData?.data || storiesData?.items || storiesData?.reels || [];
+          const items = 
+            storiesData?.data?.items || 
+            storiesData?.items || 
+            storiesData?.data || 
+            storiesData?.reels || 
+            [];
 
           if (Array.isArray(items)) {
             formattedStories = items.map((story, i) => {
-              const mediaUrl = 
-                story.video_versions?.[0]?.url || 
-                story.image_versions2?.candidates?.[0]?.url || 
-                story.display_url || 
-                story.image_url;
-
+              const video = story.video_versions?.[0]?.url || story.video_url;
+              const image = story.image_versions2?.candidates?.[0]?.url || story.display_url || story.image_url;
+              
               return {
                 id: story.id || `story_${i}`,
-                type: story.video_versions ? "video" : "image",
-                url: proxify(mediaUrl),
+                type: video ? "video" : "image",
+                url: proxify(video || image),
                 time: "Ativo"
               };
             });
           }
+        } else {
+          console.log("Erro na resposta de Stories:", storiesRes.status);
         }
       } catch (e) {
-        console.log("Erro ao carregar stories da API secundária:", e.message);
+        console.log("Falha ao consultar stories:", e.message);
       }
     }
 
@@ -144,7 +135,7 @@ app.get("/api/profile", async (req, res) => {
 
   } catch (error) {
     console.error("Erro interno:", error);
-    return res.status(500).json({ error: "Erro ao processar busca." });
+    return res.status(500).json({ error: "Erro interno no servidor." });
   }
 });
 
