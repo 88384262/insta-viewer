@@ -18,11 +18,10 @@ app.get("/api/profile", async (req, res) => {
     const apiKey = "fb6cd7e924msh9fe32786b6578cbp138615jsne52a772bf92f";
     const apiHost = "instagram-scraper-stable-api.p.rapidapi.com";
 
-    // Parâmetros esperados pela API para buscar usuário
+    // Envia o nome de usuário nos parâmetros aceitos pela API
     const params = new URLSearchParams();
-    params.append("username_or_id_or_url", username);
+    params.append("username_or_url", username);
 
-    // Faz a chamada POST para o endpoint correto da RapidAPI
     const response = await fetch(`https://${apiHost}/get_ig_user_info_v2.php`, {
       method: "POST",
       headers: {
@@ -35,20 +34,14 @@ app.get("/api/profile", async (req, res) => {
 
     const apiData = await response.json().catch(() => null);
 
-    // Se a API retornar erro HTTP ou resposta inválida
     if (!response.ok || !apiData) {
       console.error("Erro da RapidAPI:", response.status, apiData);
-      return res.status(502).json({ error: "Não foi possível carregar as informações deste perfil." });
+      return res.status(502).json({ error: "Não foi possível conectar à API de dados." });
     }
 
-    // Procura o objeto com os dados do perfil na resposta da API
+    // Extrai as informações recebidas
     const user = apiData.data || apiData.user || apiData.result || apiData;
 
-    if (!user || user.status === "fail") {
-      return res.status(404).json({ error: "Perfil não encontrado ou privado." });
-    }
-
-    // Mapeia os dados reais para o padrão do front-end
     return res.json({
       success: true,
       profile: {
@@ -68,7 +61,7 @@ app.get("/api/profile", async (req, res) => {
 
   } catch (error) {
     console.error("Erro interno no servidor:", error);
-    return res.status(500).json({ error: "Erro interno no servidor ao buscar dados." });
+    return res.status(500).json({ error: "Erro ao processar busca." });
   }
 });
 
