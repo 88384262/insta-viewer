@@ -3,8 +3,8 @@ import express from "express";
 const app = express();
 
 app.use(express.json());
+app.use(express.static("public")); // Para servir o index.html da pasta public
 
-// Proxy para liberar imagens/vídeos do Instagram sem erro de CORS/bloqueio
 const proxify = (url) => {
   if (!url || typeof url !== "string") return "";
   if (url.includes("ui-avatars.com")) return url;
@@ -26,7 +26,6 @@ app.get("/api/profile", async (req, res) => {
     const hostLooter = "instagram-looter2.p.rapidapi.com";
     const hostStories = "instagram-api-fast-reliable-data-scraper.p.rapidapi.com";
 
-    // 1. Busca Perfil e Posts via Instagram Looter
     const profileRes = await fetch(`https://${hostLooter}/profile?username=${encodeURIComponent(username)}`, {
       method: "GET",
       headers: {
@@ -51,7 +50,6 @@ app.get("/api/profile", async (req, res) => {
     const userId = String(rawId).replace(/\D/g, "");
     const isPrivate = Boolean(user.is_private);
 
-    // 2. Processa Posts do Feed
     let formattedPosts = [];
     const rawPosts = user.edge_owner_to_timeline_media?.edges || user.posts || user.media || [];
 
@@ -69,12 +67,10 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    // 3. BUSCA ROBUSTA DE STORIES (Testa múltiplas combinações)
     let formattedStories = [];
 
     if (!isPrivate) {
       const endpointsToTry = [];
-      
       if (userId) {
         endpointsToTry.push(`https://${hostStories}/stories?user_id=${userId}`);
         endpointsToTry.push(`https://${hostStories}/user/stories?user_id=${userId}`);
@@ -93,8 +89,6 @@ app.get("/api/profile", async (req, res) => {
 
           if (storiesRes.ok) {
             const storiesData = await storiesRes.json().catch(() => null);
-
-            // Mapeia onde quer que a lista de mídias esteja dentro da resposta
             const items = 
               storiesData?.items || 
               storiesData?.data?.items || 
@@ -107,17 +101,8 @@ app.get("/api/profile", async (req, res) => {
 
             if (Array.isArray(items) && items.length > 0) {
               const parsed = items.map((story, i) => {
-                const video = 
-                  story.video_versions?.[0]?.url || 
-                  story.video_url || 
-                  story.download_url;
-
-                const image = 
-                  story.image_versions2?.candidates?.[0]?.url || 
-                  story.display_url || 
-                  story.image_url ||
-                  story.thumbnail_url;
-
+                const video = story.video_versions?.[0]?.url || story.video_url || story.download_url;
+                const image = story.image_versions2?.candidates?.[0]?.url || story.display_url || story.image_url || story.thumbnail_url;
                 const mediaUrl = video || image;
 
                 return {
@@ -130,20 +115,18 @@ app.get("/api/profile", async (req, res) => {
 
               if (parsed.length > 0) {
                 formattedStories = parsed;
-                break; // Encontrou stories reais, cancela os outros testes!
+                break;
               }
             }
           }
         } catch (e) {
-          console.error("Tentativa de buscar stories falhou para:", url, e.message);
+          console.error("Erro stories:", e.message);
         }
       }
     }
 
     const rawProfilePic = user.profile_pic_url_hd || user.profile_pic_url || user.profilePic;
-    const finalProfilePic = rawProfilePic 
-      ? proxify(rawProfilePic) 
-      : `https://ui-avatars.com/api/?name=${username}&background=833ab4&color=fff`;
+    const finalProfilePic = rawProfilePic ? proxify(rawProfilePic) : `https://ui-avatars.com/api/?name=${username}&background=833ab4&color=fff`;
 
     return res.json({
       success: true,
