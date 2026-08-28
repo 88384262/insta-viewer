@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>InstaView — Visualizador de Stories e Fotos Anônimas</title>
-  
-  <!-- 🟢 SCRIPT DO GOOGLE ADSENSE -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237631269397144"
-     crossorigin="anonymous"></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5237631269397144" crossorigin="anonymous"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,211 +13,230 @@
   
   <style>
     :root {
-      --bg-color: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.85);
-      --text-main: #f8fafc;
+      --bg-dark: #0b0f19;
+      --card-bg: #131b2e;
+      --border-color: #222f47;
+      --primary: #833ab4;
+      --primary-gradient: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+      --accent: #e1306c;
+      --text-main: #f1f5f9;
       --text-muted: #94a3b8;
-      --accent: #ec4899;
-      --border: rgba(255, 255, 255, 0.08);
+      --radius-lg: 20px;
+      --radius-md: 12px;
     }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-    }
-    .navbar {
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 1rem 2rem;
-    }
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.25rem;
-    }
-    .logo-icon {
-      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-      padding: 8px;
-      border-radius: 10px;
-      display: flex;
-      color: #fff;
-    }
-    .nav-links { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-    .nav-btn { background: none; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.95rem; transition: color 0.2s; }
-    .nav-btn:hover, .nav-btn.active { color: var(--accent); }
-    .main-content { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    .navbar { border-bottom: 1px solid var(--border-color); background: rgba(19, 27, 46, 0.7); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+    .nav-container { max-width: 1100px; margin: 0 auto; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-size: 20px; font-weight: 700; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; color: white; }
+    
+    .nav-menu { display: flex; gap: 15px; align-items: center; }
+    .nav-btn-menu { background: none; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.95rem; font-family: inherit; transition: color 0.2s; }
+    .nav-btn-menu:hover, .nav-btn-menu.active { color: #c084fc; }
+
+    .main-content { max-width: 1000px; margin: 0 auto; padding: 48px 20px 80px; width: 100%; flex: 1; }
     .view-section { display: none; }
     .view-section.active { display: block; }
-    
-    /* Hero / Busca */
-    .hero-section { text-align: center; padding: 20px 0 40px 0; }
-    .hero-badge { background: rgba(236, 72, 153, 0.1); color: var(--accent); padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 15px; }
-    h1 { font-size: 2.3rem; margin-bottom: 15px; font-weight: 800; }
-    .gradient-text { background: linear-gradient(135deg, #ec4899, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero-desc { color: var(--text-muted); max-width: 600px; margin: 0 auto 30px auto; }
-    .search-box { display: flex; gap: 10px; max-width: 600px; margin: 0 auto 20px auto; background: var(--card-bg); padding: 8px; border: 1px solid var(--border); border-radius: 14px; }
-    .input-wrapper { display: flex; align-items: center; flex: 1; padding-left: 15px; }
-    .prefix { color: var(--text-muted); font-weight: 600; }
-    input[type="text"] { width: 100%; background: none; border: none; color: #fff; font-size: 1rem; outline: none; padding-left: 5px; }
-    button[type="submit"] { background: var(--accent); color: #fff; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-    button[type="submit"]:hover { opacity: 0.9; }
-    .quick-examples { display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-muted); }
-    .ex-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-main); padding: 4px 10px; border-radius: 6px; cursor: pointer; }
 
-    /* Exibição do Perfil Real & Mídias */
-    .profile-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px; margin-top: 30px; }
-    .profile-header { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 25px; }
-    .profile-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); }
-    .profile-details h2 { color: #fff; margin: 0 0 5px 0; }
-    .profile-details p { color: var(--text-muted); margin: 0 0 15px 0; font-size: 0.9rem; }
-    .stats-flex { display: flex; gap: 20px; flex-wrap: wrap; }
-    .stat-box { background: rgba(255,255,255,0.03); padding: 8px 15px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; }
-    .stat-box strong { color: #fff; display: block; }
-    
-    /* Abas Internas do Perfil (Stories / Fotos) */
-    .profile-tabs { display: flex; gap: 10px; border-bottom: 1px solid var(--border); margin-bottom: 20px; padding-bottom: 10px; }
-    .tab-trigger { background: none; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; padding: 6px 12px; border-radius: 6px; }
-    .tab-trigger.active { background: var(--accent); color: #fff; }
-    .media-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-    .media-card { background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); text-align: center; padding: 15px; }
-    .media-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+    .hero-section { text-align: center; margin-bottom: 40px; }
+    .hero-badge { display: inline-block; padding: 6px 16px; border-radius: 30px; background: rgba(131, 58, 180, 0.15); border: 1px solid rgba(131, 58, 180, 0.3); color: #c084fc; font-size: 12px; font-weight: 700; margin-bottom: 16px; }
+    h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+    .gradient-text { background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-desc { color: var(--text-muted); font-size: 16px; max-width: 620px; margin: 0 auto 32px; line-height: 1.6; }
 
-    /* Grids do Blog e Rankings */
+    .search-box { display: flex; gap: 12px; max-width: 600px; margin: 0 auto 20px; background: var(--card-bg); padding: 8px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); }
+    .input-wrapper { display: flex; align-items: center; flex: 1; padding-left: 16px; }
+    .prefix { color: var(--text-muted); font-weight: 700; font-size: 18px; margin-right: 4px; }
+    .search-box input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 16px; font-family: inherit; }
+    .search-box button { background: var(--primary-gradient); border: none; color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+    
+    .quick-examples { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--text-muted); }
+    .ex-btn { background: none; border: none; color: #c084fc; cursor: pointer; font-family: inherit; font-weight: 600; padding: 4px 8px; border-radius: 6px; }
+    .ex-btn:hover { background: rgba(192, 132, 252, 0.1); }
+
+    .loader-container { text-align: center; padding: 40px 0; }
+    .spinner { width: 44px; height: 44px; border: 4px solid var(--border-color); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-card { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 16px 24px; border-radius: var(--radius-md); text-align: center; max-width: 600px; margin: 0 auto 30px; }
+
+    .profile-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 32px; display: flex; gap: 32px; align-items: center; margin-bottom: 32px; flex-wrap: wrap; }
+    .avatar-wrapper { position: relative; width: 110px; height: 110px; flex-shrink: 0; }
+    .avatar-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--card-bg); position: relative; z-index: 2; }
+    .story-ring { position: absolute; inset: -5px; border-radius: 50%; background: var(--primary-gradient); z-index: 1; }
+    .user-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .user-header h2 { font-size: 24px; font-weight: 800; }
+    .privacy-badge { font-size: 12px; padding: 4px 10px; border-radius: 20px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 600; }
+    .privacy-badge.private { background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.3); }
+    .profile-info h3 { font-size: 16px; color: var(--text-muted); font-weight: 500; margin-bottom: 12px; }
+    .bio-text { font-size: 14px; line-height: 1.5; white-space: pre-line; margin-bottom: 20px; color: #cbd5e1; }
+    .stats-row { display: flex; gap: 32px; flex-wrap: wrap; }
+    .stat-item { display: flex; flex-direction: column; }
+    .stat-item strong { font-size: 18px; font-weight: 800; }
+    .stat-item span { font-size: 13px; color: var(--text-muted); }
+
+    .private-notice { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px; text-align: center; max-width: 500px; margin: 0 auto; }
+
+    .tab-buttons { display: flex; gap: 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; }
+    .tab-btn { background: none; border: none; color: var(--text-muted); padding: 14px 20px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid transparent; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--accent); }
+    .tab-count { background: var(--border-color); color: #fff; font-size: 12px; padding: 2px 8px; border-radius: 10px; }
+
+    .stories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+    .story-card { position: relative; aspect-ratio: 9/16; border-radius: var(--radius-md); overflow: hidden; background: #000; cursor: pointer; border: 1px solid var(--border-color); }
+    .story-card img { width: 100%; height: 100%; object-fit: cover; }
+    .story-time { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 12px; font-size: 12px; }
+
+    .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .post-card { position: relative; aspect-ratio: 1; border-radius: var(--radius-md); overflow: hidden; background: #000; cursor: pointer; border: 1px solid var(--border-color); }
+    .post-card img { width: 100%; height: 100%; object-fit: cover; }
+    .post-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; gap: 16px; opacity: 0; transition: opacity 0.2s; font-weight: 700; }
+    .post-card:hover .post-overlay { opacity: 1; }
+
+    .empty-state { text-align: center; color: var(--text-muted); padding: 48px; width: 100%; grid-column: 1 / -1; background: var(--card-bg); border-radius: var(--radius-md); border: 1px dashed var(--border-color); }
+
+    /* Blog e Top 50 Estilos */
     .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 25px; }
-    .blog-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
-    .blog-tag { font-size: 0.7rem; color: var(--accent); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+    .blog-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
+    .blog-tag { font-size: 0.7rem; color: #c084fc; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
     .blog-card h3 { font-size: 1.1rem; margin: 0 0 10px 0; color: #fff; }
     .blog-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
-    .read-more { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
-    
-    .article-full { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 35px; margin-top: 20px; }
-    .back-blog { background: none; border: none; color: var(--accent); font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-block; }
+    .read-more { color: #c084fc; text-decoration: none; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+    .article-full { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 35px; margin-top: 20px; }
+    .back-blog { background: none; border: none; color: #c084fc; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-block; font-size: 0.95rem; }
 
-    /* Tabela do Top 50 */
-    .ranking-table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); margin-top: 20px; }
-    .ranking-table th, .ranking-table td { padding: 14px 20px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .ranking-table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 14px; overflow: hidden; border: 1px solid var(--border-color); margin-top: 20px; }
+    .ranking-table th, .ranking-table td { padding: 14px 20px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
     .ranking-table th { background: rgba(255,255,255,0.05); color: #fff; font-weight: 700; }
     .ranking-table td { color: var(--text-muted); }
-    .ranking-table td:first-child { font-weight: bold; color: var(--accent); }
+    .ranking-table td:first-child { font-weight: bold; color: #c084fc; }
     .ranking-table td:nth-child(2) { color: #fff; font-weight: 600; }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: var(--card-bg); border-radius: var(--radius-lg); max-width: 500px; width: 100%; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
+    .modal-close { position: absolute; top: 12px; right: 16px; background: rgba(0,0,0,0.6); border: none; color: #fff; font-size: 28px; cursor: pointer; z-index: 10; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .modal-body img { width: 100%; max-height: 70vh; object-fit: contain; background: #000; }
+    .modal-footer { padding: 16px; display: flex; justify-content: center; }
+    .download-btn { background: var(--primary-gradient); color: white; text-decoration: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; }
+
     .hidden { display: none !important; }
-    .modal-content { background: #1e293b; border: 1px solid var(--border); border-radius: 16px; padding: 30px; max-width: 500px; width: 90%; position: relative; }
-    .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
-    footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 60px; }
-    footer a { color: var(--accent); text-decoration: none; margin: 0 5px; }
+    footer { border-top: 1px solid var(--border-color); padding: 32px 20px; text-align: center; color: var(--text-muted); font-size: 13px; background: var(--bg-dark); }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
   <header class="navbar">
     <div class="nav-container">
-      <a href="javascript:void(0)" onclick="switchView('home')" class="logo">
+      <a href="javascript:void(0)" onclick="switchMainView('home')" class="logo">
         <div class="logo-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg>
         </div>
         <span>Insta<strong>View</strong></span>
       </a>
-      <div class="nav-links">
-        <button class="nav-btn active" onclick="switchView('home')">Início (Visualizador)</button>
-        <button class="nav-btn" onclick="switchView('top50')">Top 50 Mais Seguidos</button>
-        <button class="nav-btn" onclick="switchView('blog')">Blog (30 Artigos)</button>
+      <div class="nav-menu">
+        <button class="nav-btn-menu active" onclick="switchMainView('home')">Visualizador</button>
+        <button class="nav-btn-menu" onclick="switchMainView('top50')">Top 50 Mais Seguidos</button>
+        <button class="nav-btn-menu" onclick="switchMainView('blog')">Blog (30 Artigos)</button>
       </div>
     </div>
   </header>
 
   <main class="main-content">
     
-    <!-- SEÇÃO 1: HOME (VISUALIZADOR REAL DE PERFIS) -->
     <div id="homeView" class="view-section active">
       <section class="hero-section">
         <div class="hero-badge">CONSULTA ANÔNIMA EM TEMPO REAL</div>
-        <h1>Visualizador de Perfis, Stories e <span class="gradient-text">Fotos</span></h1>
-        <p class="hero-desc">Digite o nome de usuário (@) para carregar os dados públicos, stories ativos e postagens de forma anônima.</p>
+        <h1>Visualizador de Perfis e Stories <span class="gradient-text">Anônimos</span></h1>
+        <p class="hero-desc">Consulte dados públicos, stories e postagens do Instagram de forma totalmente segura e anônima.</p>
 
         <form id="searchForm" class="search-box">
           <div class="input-wrapper">
             <span class="prefix">@</span>
             <input type="text" id="usernameInput" placeholder="ex: instagram" autocomplete="off" required />
           </div>
-          <button type="submit" id="searchBtn">Consultar</button>
+          <button type="submit">Consultar</button>
         </form>
 
         <div class="quick-examples">
-          <span>Testar perfil:</span>
-          <button class="ex-btn" onclick="document.getElementById('usernameInput').value='instagram'; document.getElementById('searchForm').dispatchEvent(new Event('submit'))">@instagram</button>
-          <button class="ex-btn" onclick="document.getElementById('usernameInput').value='natgeo'; document.getElementById('searchForm').dispatchEvent(new Event('submit'))">@natgeo</button>
+          <span>Sugestões:</span>
+          <button class="ex-btn" data-user="instagram">@instagram</button>
+          <button class="ex-btn" data-user="natgeo">@natgeo</button>
         </div>
       </section>
 
-      <!-- Container Dinâmico do Perfil Real -->
-      <div id="profileResultContainer" class="hidden">
-        <div class="profile-container">
-          <div class="profile-header">
-            <img id="realAvatar" src="" alt="Avatar" class="profile-avatar" />
-            <div class="profile-details">
-              <h2 id="realFullName">Nome do Usuário</h2>
-              <p id="realUsername">@usuario</p>
-              <div class="stats-flex">
-                <div class="stat-box"><strong id="realPosts">0</strong> Publicações</div>
-                <div class="stat-box"><strong id="realFollowers">0</strong> Seguidores</div>
-                <div class="stat-box"><strong id="realFollowing">0</strong> Seguindo</div>
+      <div id="loader" class="loader-container hidden">
+        <div class="spinner"></div>
+        <p style="color: var(--text-muted);">Buscando dados em tempo real...</p>
+      </div>
+
+      <div id="errorMessage" class="error-card hidden"></div>
+
+      <div id="profileResult" class="hidden">
+        <div class="profile-card">
+          <div class="avatar-wrapper">
+            <div class="story-ring"></div>
+            <img id="profilePic" src="" alt="Avatar" />
+          </div>
+          <div class="profile-info" style="flex: 1;">
+            <div class="user-header">
+              <h2 id="usernameHeader">@usuario</h2>
+              <span id="privacyBadge" class="privacy-badge">Público</span>
+            </div>
+            <h3 id="fullName">Nome Completo</h3>
+            <p id="biography" class="bio-text"></p>
+            <div class="stats-row">
+              <div class="stat-item">
+                <strong id="postsCount">0</strong>
+                <span>Publicações</span>
+              </div>
+              <div class="stat-item">
+                <strong id="followersCount">0</strong>
+                <span>Seguidores</span>
+              </div>
+              <div class="stat-item">
+                <strong id="followingCount">0</strong>
+                <span>Seguindo</span>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Abas de Conteúdo (Stories / Posts) -->
-          <div class="profile-tabs">
-            <button class="tab-trigger active" onclick="switchProfileTab('stories')">Stories Ativos (Anônimo)</button>
-            <button class="tab-trigger" onclick="switchProfileTab('posts')">Publicações Recentes</button>
+        <div id="privateNotice" class="private-notice hidden">
+          <div class="lock-icon">🔒</div>
+          <h3>Este perfil é privado</h3>
+          <p>As postagens e stories de contas privadas são protegidas pelas diretrizes de privacidade do Instagram e não podem ser exibidas publicamente.</p>
+        </div>
+
+        <div id="publicContent">
+          <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="storiesTab">
+              <span>Stories Ativos</span>
+              <span id="storiesBadgeCount" class="tab-count">0</span>
+            </button>
+            <button class="tab-btn" data-tab="postsTab">
+              <span>Publicações</span>
+              <span id="postsBadgeCount" class="tab-count">0</span>
+            </button>
           </div>
 
-          <!-- Conteúdo da Aba Stories -->
-          <div id="tabStories" class="profile-tab-content">
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Visualizando stories de forma totalmente anônima sem deixar registros na conta de origem:</p>
-            <div class="media-grid" id="storiesGrid">
-              <!-- Inserido dinamicamente via script -->
-            </div>
+          <div id="storiesTab" class="tab-content">
+            <div id="storiesGrid" class="stories-grid"></div>
           </div>
 
-          <!-- Conteúdo da Aba Posts -->
-          <div id="tabPosts" class="profile-tab-content hidden">
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Últimas postagens públicas indexadas:</p>
-            <div class="media-grid" id="postsGrid">
-              <!-- Inserido dinamicamente via script -->
-            </div>
+          <div id="postsTab" class="tab-content hidden">
+            <div id="postsGrid" class="posts-grid"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SEÇÃO 2: TOP 50 MAIS SEGUIDOS -->
     <div id="top50View" class="view-section">
       <div style="text-align: center; margin-bottom: 25px;">
         <h1 style="font-size: 2rem;">Top 50 Perfis Mais Seguidos do Instagram</h1>
-        <p style="color: var(--text-muted);">Ranking atualizado com as contas globais de maior relevância.</p>
+        <p style="color: var(--text-muted);">Ranking atualizado com as contas de maior audiência global na rede social.</p>
       </div>
       <table class="ranking-table">
         <thead>
@@ -234,12 +251,11 @@
       </table>
     </div>
 
-    <!-- SEÇÃO 3: BLOG (30 ARTIGOS) -->
     <div id="blogView" class="view-section">
       <div id="blogListContainer">
         <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="font-size: 2.2rem; margin-bottom: 10px;">Central de Conteúdo e Guias (30 Artigos)</h1>
-          <p style="color: var(--text-muted);">Artigos otimizados para indexação e aprovação rápida no AdSense.</p>
+          <h1 style="font-size: 2.2rem; margin-bottom: 10px;">Central de Guias e Artigos (30 Artigos)</h1>
+          <p style="color: var(--text-muted);">Conteúdo completo e otimizado para navegação e indexação orgânica.</p>
         </div>
         <div class="blog-grid" id="articlesGrid"></div>
       </div>
@@ -252,152 +268,95 @@
 
   </main>
 
-  <!-- Rodapé -->
-  <footer>
-    <p><strong>InstaView</strong> — Ferramenta independente de consulta pública de dados abertos.</p>
-    <p style="margin: 10px 0;">
-      <a href="javascript:void(0)" onclick="openModal('privacyModal')">Política de Privacidade</a> | 
-      <a href="javascript:void(0)" onclick="openModal('termsModal')">Termos de Uso</a> | 
-      <a href="javascript:void(0)" onclick="openModal('contactModal')">Contato</a>
-    </p>
-    <p style="font-size: 0.75rem; color: #64748b; max-width: 700px; margin: 0 auto;">Este site não possui vínculo comercial com a Meta Inc.</p>
-  </footer>
-
-  <!-- Modais -->
-  <div id="privacyModal" class="modal-overlay hidden">
+  <div id="mediaModal" class="modal-overlay hidden">
     <div class="modal-content">
-      <button class="modal-close" onclick="closeModal('privacyModal')">&times;</button>
-      <h2 style="color: #fff; margin-bottom: 15px;">Política de Privacidade</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">O Google AdSense utiliza cookies para exibir anúncios personalizados. Não armazenamos dados de navegação dos usuários nas consultas públicas.</p>
-    </div>
-  </div>
-
-  <div id="termsModal" class="modal-overlay hidden">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal('termsModal')">&times;</button>
-      <h2 style="color: #fff; margin-bottom: 15px;">Termos de Uso</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Serviço destinado unicamente à consulta de dados públicos já disponíveis abertamente na web.</p>
-    </div>
-  </div>
-
-  <div id="contactModal" class="modal-overlay hidden">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal('contactModal')">&times;</button>
-      <h2 style="color: #fff; margin-bottom: 15px;">Contato</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Suporte técnico e solicitações:</p>
-      <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; text-align: center; margin-top: 15px; color: var(--accent); font-weight: bold;">
-        suporte@instaview-portal.com
+      <button id="closeModal" class="modal-close">&times;</button>
+      <div class="modal-body">
+        <img id="modalImg" src="" alt="Mídia Ampliada" />
+      </div>
+      <div class="modal-footer">
+        <a id="downloadBtn" href="" target="_blank" download class="download-btn">Baixar Mídia</a>
       </div>
     </div>
   </div>
 
+  <footer>
+    <p><strong>InstaView</strong> — Ferramenta independente de consulta pública de dados abertos.</p>
+    <p style="font-size: 12px; color: #64748b; margin-top: 8px;">Este site não possui vínculo comercial com a Meta Inc.</p>
+  </footer>
+
   <script>
-    function switchView(viewName) {
+    // Navegação Principal
+    function switchMainView(viewName) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-      
-      if(viewName === 'home') {
+      document.querySelectorAll('.nav-btn-menu').forEach(el => el.classList.remove('active'));
+
+      if (viewName === 'home') {
         document.getElementById('homeView').classList.add('active');
-        document.querySelectorAll('.nav-btn')[0].classList.add('active');
-      } else if(viewName === 'top50') {
+        document.querySelectorAll('.nav-btn-menu')[0].classList.add('active');
+      } else if (viewName === 'top50') {
         document.getElementById('top50View').classList.add('active');
-        document.querySelectorAll('.nav-btn')[1].classList.add('active');
-      } else if(viewName === 'blog') {
+        document.querySelectorAll('.nav-btn-menu')[1].classList.add('active');
+      } else if (viewName === 'blog') {
         document.getElementById('blogView').classList.add('active');
-        document.querySelectorAll('.nav-btn')[2].classList.add('active');
+        document.querySelectorAll('.nav-btn-menu')[2].classList.add('active');
         backToBlogList();
       }
       window.scrollTo(0,0);
     }
 
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-    function switchProfileTab(tab) {
-      document.querySelectorAll('.tab-trigger').forEach(el => el.classList.remove('active'));
-      if(tab === 'stories') {
-        document.querySelectorAll('.tab-trigger')[0].classList.add('active');
-        document.getElementById('tabStories').classList.remove('hidden');
-        document.getElementById('tabPosts').classList.add('hidden');
-      } else {
-        document.querySelectorAll('.tab-trigger')[1].classList.add('active');
-        document.getElementById('tabPosts').classList.remove('hidden');
-        document.getElementById('tabStories').classList.add('hidden');
-      }
-    }
-
-    // Consulta real baseada no input do usuário utilizando fetch via API pública/proxy
-    document.getElementById('searchForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      let username = document.getElementById('usernameInput').value.trim().replace('@','');
-      if(!username) return;
-
-      const container = document.getElementById('profileResultContainer');
-      container.classList.remove('hidden');
-      
-      // Feedback visual de carregamento
-      document.getElementById('realFullName').innerText = "Buscando dados de @" + username + "...";
-      document.getElementById('realUsername').innerText = "@" + username;
-      document.getElementById('realAvatar').src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150";
-      document.getElementById('realPosts').innerText = "...";
-      document.getElementById('realFollowers').innerText = "...";
-      document.getElementById('realFollowing').innerText = "...";
-      
-      try {
-        // Exemplo integrando com endpoint público de consulta ou o backend do seu projeto GitHub
-        let response = await fetch(`https://www.instagram.com/${username}/?__a=1&__d=dis`);
-        // Nota: Caso o Instagram bloqueie o CORS direto no navegador, você pode apontar para a URL da API do seu backend hospedado no Vercel/Render.
-        
-        // Simulador de dados reais obtidos com sucesso para demonstração imediata do layout:
-        setTimeout(() => {
-          document.getElementById('realFullName').innerText = username.charAt(0).toUpperCase() + username.slice(1) + " (Oficial)";
-          document.getElementById('realAvatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
-          document.getElementById('realPosts').innerText = "128";
-          document.getElementById('realFollowers').innerText = "45.2M";
-          document.getElementById('realFollowing').innerText = "342";
-
-          // Renderizar Stories reais/simulados anonimamente
-          document.getElementById('storiesGrid').innerHTML = `
-            <div class="media-card">
-              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300" alt="Story 1">
-              <span style="font-size: 0.75rem; color: var(--text-muted);">Story Ativo há 2h</span>
-            </div>
-            <div class="media-card">
-              <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=300" alt="Story 2">
-              <span style="font-size: 0.75rem; color: var(--text-muted);">Story Ativo há 5h</span>
-            </div>
-          `;
-
-          // Renderizar Publicações reais/simuladas
-          document.getElementById('postsGrid').innerHTML = `
-            <div class="media-card">
-              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=300" alt="Post 1">
-              <span style="font-size: 0.75rem; color: var(--text-muted);">12.4k curtidas</span>
-            </div>
-            <div class="media-card">
-              <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300" alt="Post 2">
-              <span style="font-size: 0.75rem; color: var(--text-muted);">8.9k curtidas</span>
-            </div>
-          `;
-        }, 800);
-
-      } catch (err) {
-        console.error("Erro ao buscar dados", err);
-      }
-    });
-
     // Top 50 Dados
     const top50Data = [
       {name: "@instagram", cat: "Rede Social", followers: "675M"},
       {name: "@cristiano", cat: "Esportes", followers: "640M"},
-      {name: "@leomessy", cat: "Esportes", followers: "505M"},
+      {name: "@leomessi", cat: "Esportes", followers: "505M"},
       {name: "@selenagomez", cat: "Música", followers: "425M"},
       {name: "@kyliejenner", cat: "Empresária", followers: "398M"},
       {name: "@therock", cat: "Ator", followers: "395M"},
       {name: "@arianagrande", cat: "Música", followers: "378M"},
       {name: "@kimkardashian", cat: "Mídia", followers: "362M"},
       {name: "@beyonce", cat: "Música", followers: "318M"},
-      {name: "@justinbieber", cat: "Música", followers: "294M"}
+      {name: "@justinbieber", cat: "Música", followers: "294M"},
+      {name: "@kendalljenner", cat: "Moda", followers: "293M"},
+      {name: "@taylorswift", cat: "Música", followers: "283M"},
+      {name: "@jlo", cat: "Música", followers: "252M"},
+      {name: "@neymarjr", cat: "Esportes", followers: "223M"},
+      {name: "@virat.kohli", cat: "Esportes", followers: "270M"},
+      {name: "@nickiminaj", cat: "Música", followers: "228M"},
+      {name: "@mileycyrus", cat: "Música", followers: "216M"},
+      {name: "@katyperry", cat: "Música", followers: "206M"},
+      {name: "@zendaya", cat: "Atriz", followers: "184M"},
+      {name: "@kevinhart4real", cat: "Comédia", followers: "179M"},
+      {name: "@iamcardib", cat: "Música", followers: "167M"},
+      {name: "@kingjames", cat: "Esportes", followers: "159M"},
+      {name: "@realmadrid", cat: "Esportes", followers: "160M"},
+      {name: "@charlidamelio", cat: "Criadora", followers: "151M"},
+      {name: "@badbunnypr", cat: "Música", followers: "150M"},
+      {name: "@champagnepapi", cat: "Música", followers: "145M"},
+      {name: "@fcbarcelona", cat: "Esportes", followers: "132M"},
+      {name: "@billieeilish", cat: "Música", followers: "120M"},
+      {name: "@nasa", cat: "Ciência", followers: "97M"},
+      {name: "@natgeo", cat: "Mídia", followers: "282M"},
+      {name: "@dualipa", cat: "Música", followers: "88M"},
+      {name: "@davidbeckham", cat: "Esportes", followers: "88M"},
+      {name: "@ronaldinho", cat: "Esportes", followers: "76M"},
+      {name: "@tomholland2013", cat: "Ator", followers: "67M"},
+      {name: "@anitta", cat: "Música", followers: "65M"},
+      {name: "@whinderssonnunes", cat: "Criador", followers: "59M"},
+      {name: "@vinibjr", cat: "Esportes", followers: "50M"},
+      {name: "@gigihadid", cat: "Moda", followers: "78M"},
+      {name: "@bellahadid", cat: "Moda", followers: "61M"},
+      {name: "@chrishemsworth", cat: "Ator", followers: "58M"},
+      {name: "@priyankachopra", cat: "Atriz", followers: "91M"},
+      {name: "@shakira", cat: "Música", followers: "90M"},
+      {name: "@emmawatson", cat: "Atriz", followers: "75M"},
+      {name: "@garethbale11", cat: "Esportes", followers: "52M"},
+      {name: "@zaralarsson", cat: "Música", followers: "8M"},
+      {name: "@ddlovato", cat: "Música", followers: "155M"},
+      {name: "@marcelotwelve", cat: "Esportes", followers: "68M"},
+      {name: "@shraddhakapoor", cat: "Atriz", followers: "92M"},
+      {name: "@aliaabhatt", cat: "Atriz", followers: "85M"},
+      {name: "@lalalalisa_m", cat: "Música", followers: "104M"}
     ];
     let tBody = document.getElementById('top50TableBody');
     top50Data.forEach((item, idx) => {
@@ -437,8 +396,8 @@
       document.getElementById('articleBodyContent').innerHTML = `
         <span class="blog-tag">${art.category}</span>
         <h1>${art.title}</h1>
-        <p style="color:#fff; font-weight:600;">${art.desc}</p>
-        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+        <p style="color:#fff; font-weight:600; margin-bottom: 20px;">${art.desc}</p>
+        <hr style="border:0; border-top:1px solid var(--border-color); margin-bottom:20px;">
         <p>${art.content}</p>
         <p>${art.content}</p>
       `;
@@ -449,7 +408,162 @@
       document.getElementById('blogListContainer').classList.remove('hidden');
       window.scrollTo(0,0);
     }
-  </script>
 
+    // Lógica do Visualizador de Perfil Real (Seu Script original integrado)
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchForm = document.querySelector("#searchForm");
+      const usernameInput = document.querySelector("#usernameInput");
+      const loader = document.querySelector("#loader");
+      const errorMessage = document.querySelector("#errorMessage");
+      const profileResult = document.querySelector("#profileResult");
+
+      const mediaModal = document.querySelector("#mediaModal");
+      const modalImg = document.querySelector("#modalImg");
+      const downloadBtn = document.querySelector("#downloadBtn");
+      const closeModal = document.querySelector("#closeModal");
+
+      document.querySelectorAll(".ex-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const u = btn.dataset.user;
+          usernameInput.value = u;
+          fetchProfile(u);
+        });
+      });
+
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
+          btn.classList.add("active");
+          const targetTab = document.getElementById(btn.dataset.tab);
+          if (targetTab) targetTab.classList.remove("hidden");
+        });
+      });
+
+      searchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = usernameInput.value.trim();
+        if (username) fetchProfile(username);
+      });
+
+      closeModal.addEventListener("click", () => mediaModal.classList.add("hidden"));
+      mediaModal.addEventListener("click", (e) => {
+        if (e.target === mediaModal) mediaModal.classList.add("hidden");
+      });
+
+      async function fetchProfile(username) {
+        showLoader();
+        try {
+          const res = await fetch(`/api/profile?username=${encodeURIComponent(username)}`);
+          const data = await res.json();
+
+          if (!res.ok || !data.success) {
+            throw new Error(data.error || "Não foi possível carregar o perfil.");
+          }
+
+          renderProfile(data);
+        } catch (err) {
+          showError(err.message);
+        } finally {
+          hideLoader();
+        }
+      }
+
+      function renderProfile(data) {
+        const p = data.profile;
+        document.querySelector("#profilePic").src = p.profilePic;
+        document.querySelector("#usernameHeader").textContent = `@${p.username}`;
+        document.querySelector("#fullName").textContent = p.fullName;
+        document.querySelector("#biography").textContent = p.biography;
+        document.querySelector("#postsCount").textContent = formatNumber(p.postsCount);
+        document.querySelector("#followersCount").textContent = formatNumber(p.followersCount);
+        document.querySelector("#followingCount").textContent = formatNumber(p.followingCount);
+
+        const privacyBadge = document.querySelector("#privacyBadge");
+        const privateNotice = document.querySelector("#privateNotice");
+        const publicContent = document.querySelector("#publicContent");
+
+        if (p.isPrivate) {
+          privacyBadge.textContent = "🔒 Privado";
+          privacyBadge.classList.add("private");
+          privateNotice.classList.remove("hidden");
+          publicContent.classList.add("hidden");
+        } else {
+          privacyBadge.textContent = "Público";
+          privacyBadge.classList.remove("private");
+          privateNotice.classList.add("hidden");
+          publicContent.classList.remove("hidden");
+          renderStories(data.stories || []);
+          renderPosts(data.posts || []);
+        }
+
+        errorMessage.classList.add("hidden");
+        profileResult.classList.remove("hidden");
+      }
+
+      function renderStories(stories) {
+        const grid = document.querySelector("#storiesGrid");
+        document.querySelector("#storiesBadgeCount").textContent = stories.length;
+        grid.innerHTML = "";
+
+        if (stories.length === 0) {
+          grid.innerHTML = `<div class="empty-state">Nenhum story ativo nas últimas 24 horas.</div>`;
+          return;
+        }
+
+        stories.forEach(story => {
+          const card = document.createElement("div");
+          card.className = "story-card";
+          card.innerHTML = `<img src="${story.url}" alt="Story" /><span class="story-time">${story.time}</span>`;
+          card.addEventListener("click", () => openModal(story.url));
+          grid.appendChild(card);
+        });
+      }
+
+      function renderPosts(posts) {
+        const grid = document.querySelector("#postsGrid");
+        document.querySelector("#postsBadgeCount").textContent = posts.length;
+        grid.innerHTML = "";
+
+        if (posts.length === 0) {
+          grid.innerHTML = `<div class="empty-state">Nenhuma publicação encontrada neste perfil.</div>`;
+          return;
+        }
+
+        posts.forEach(post => {
+          const card = document.createElement("div");
+          card.className = "post-card";
+          card.innerHTML = `<img src="${post.image}" alt="Publicação" /><div class="post-overlay"><span>❤️ ${formatNumber(post.likes)}</span><span>💬 ${formatNumber(post.comments)}</span></div>`;
+          card.addEventListener("click", () => openModal(post.image));
+          grid.appendChild(card);
+        });
+      }
+
+      function openModal(imgUrl) {
+        modalImg.src = imgUrl;
+        downloadBtn.href = imgUrl;
+        mediaModal.classList.remove("hidden");
+      }
+
+      function showLoader() {
+        loader.classList.remove("hidden");
+        errorMessage.classList.add("hidden");
+        profileResult.classList.add("hidden");
+      }
+
+      function hideLoader() { loader.classList.add("hidden"); }
+
+      function showError(msg) {
+        errorMessage.textContent = msg;
+        errorMessage.classList.remove("hidden");
+        profileResult.classList.add("hidden");
+      }
+
+      function formatNumber(num) {
+        if (num === null || num === undefined) return "0";
+        return new Intl.NumberFormat("pt-BR", { notation: "compact" }).format(num);
+      }
+    });
+  </script>
 </body>
 </html>
