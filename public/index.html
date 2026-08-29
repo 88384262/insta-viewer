@@ -463,7 +463,7 @@
             <div class="grid-list">
                 <div class="content-card">
                     <h3>Como o sistema consulta os perfis?</h3>
-                    <p>As consultas utilizam endpoints estruturados que buscam metadados diretamente de perfis públicos em tempo real.</p>
+                    <p>As consultas utilizam rotinas estruturadas que buscam metadados diretamente de perfis públicos em tempo real.</p>
                 </div>
                 <div class="content-card">
                     <h3>É possível visualizar perfis privados?</h3>
@@ -566,18 +566,18 @@
             { title: "Redes Neurais na Recomendação de Feeds", desc: "O funcionamento do aprendizado de máquina na personalização do fluxo de conteúdos exibidos.", descLong: "Algoritmos baseados em IA analisam o histórico de interações de cada usuário para entregar um feed altamente personalizado e viciante." },
             { title: "Gerenciamento de Cache e Performance Web", desc: "Otimização de tempo de carregamento de páginas através de estratégias avançadas de armazenamento temporário.", descLong: "O uso eficiente de cache reduz a carga no servidor e acelera a abertura de páginas, melhorando a experiência do usuário final." },
             { title: "Políticas de Cookies e Transparência", desc: "Implementação de avisos de consentimento e conformidade com regulamentações internacionais de rastreio.", descLong: "Informar claramente quais dados são armazenados por meio de cookies é uma exigência legal e um sinal de respeito à privacidade do visitante." },
-            { title: "Integração de APIs com Node.js e Express", desc: "Construção de backends robustos para processamento de requisições assíncronas de alta escala.", descLong: "Node.js em conjunto com o framework Express oferece agilidade e estabilidade para lidar com milhares de requisições simultâneas." },
+            { title: "Integração de Módulos com Node.js e Express", desc: "Construção de backends robustos para processamento de requisições assíncronas de alta escala.", descLong: "Node.js em conjunto com o framework Express oferece agilidade e estabilidade para lidar com milhares de requisições simultâneas." },
             { title: "Design Responsivo em Interfaces Mobile", desc: "Adaptação de layouts fluidos para garantir usabilidade perfeita em smartphones e tablets de todos os portes.", descLong: "Como a maioria dos acessos ocorre via dispositivos móveis, o design mobile-first deixou de ser opcional e tornou-se obrigatório." },
             { title: "Growth Hacking com Dados Abertos", desc: "Estratégias de crescimento acelerado baseadas na mineração e inteligência de informações públicas.", descLong: "Analisar tendências de mercado através de dados públicos permite identificar oportunidades de expansão de marca com baixo custo de aquisição." },
-            { title: "Mitigação de Ataques e Rate Limiting", desc: "Proteção contra abusos de requisições excessivas e controle de tráfego malicioso em servidores web.", descLong: "Limitar o número de requisições por IP protege a infraestrutura contra ataques de negação de serviço e raspagem de dados abusiva." },
-            { title: "Monitoramento de Uptime e Latência", desc: "Ferramentas de checagem contínua para garantir a estabilidade e o tempo de resposta das APIs.", descLong: "Sistemas de monitoramento disparam alertas imediatos caso ocorram quedas de servidores ou lentidão excessiva nas respostas." },
+            { title: "Mitigação de Ataques e Proteção de Servidor", desc: "Proteção contra abusos de requisições excessivas e controle de tráfego malicioso em servidores web.", descLong: "Limitar o número de requisições por IP protege a infraestrutura contra ataques de negação de serviço e raspagem de dados abusiva." },
+            { title: "Monitoramento de Uptime e Latência", desc: "Ferramentas de checagem contínua para garantir a estabilidade e o tempo de resposta do sistema.", descLong: "Sistemas de monitoramento disparam alertas imediatos caso ocorram quedas de servidores ou lentidão excessiva nas respostas." },
             { title: "O Futuro da Indexação de Mídias Sociais", desc: "Como os motores de busca tradicionais estão catalogando publicações e perfis na web aberta.", descLong: "Buscas na web estão cada vez mais integradas a conteúdos de redes sociais, mudando a forma como marcas aparecem nos resultados de pesquisa." },
             { title: "Uso de CDNs para Otimização de Mídia", desc: "Distribuição global de imagens e vídeos através de redes de entrega de conteúdo de alta velocidade.", descLong: "CDNs armazenam arquivos estáticos em servidores próximos geograficamente ao usuário, reduzindo drasticamente o tempo de carregamento." },
             { title: "Clean Code em JavaScript Moderno", desc: "Padrões de escrita de código limpo, reutilizável e de fácil manutenção a longo prazo.", descLong: "Variáveis bem nomeadas, funções curtas e modularização evitam o débito técnico e facilitam manutenções futuras no código-fonte." },
             { title: "Tratamento Avançado de Erros Assíncronos", desc: "Captura e exibição amigável de falhas de comunicação em aplicações web baseadas em promessas.", descLong: "Blocos try/catch bem estruturados evitam que falhas de rede quebrem a interface do usuário, exibindo avisos claros quando necessário." },
             { title: "Arquitetura de Microsserviços Escaláveis", desc: "Desacoplamento de sistemas complexos para garantir flexibilidade e independência operacional.", descLong: "Dividir grandes aplicações em serviços menores e independentes facilita atualizações e escalabilidade sob demanda." },
             { title: "Gestão de Repositórios Git e Versionamento", desc: "Fluxos de trabalho eficientes para controle de alterações e deploy contínuo em ambientes de produção.", descLong: "O uso correto de branches e commits organizados garante segurança ao implementar novas funcionalidades em projetos web." },
-            { title: "Documentação Técnica de APIs Restful", desc: "Padrões rigorosos de especificação de rotas, parâmetros e contratos de dados para desenvolvedores.", descLong: "Uma boa documentação acelera integrações e reduz dúvidas de equipes técnicas ao consumir serviços de backend." }
+            { title: "Documentação Técnica de Sistemas Restful", desc: "Padrões rigorosos de especificação de rotas, parâmetros e contratos de dados para desenvolvedores.", descLong: "Uma boa documentação acelera integrações e reduz dúvidas de equipes técnicas ao consumir serviços de backend." }
         ];
 
         articlesGrid.innerHTML = articlesData.map((art, index) => `
@@ -619,7 +619,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Rankings Reais Top 50 (Nomes de Contas Verdadeiras)
+        // Rankings Reais Top 50
         const realRankings = [
             { user: "@cristiano", name: "Cristiano Ronaldo", desc: "Liderança global em seguidores e métricas de impacto de marca na plataforma." },
             { user: "@leomessi", name: "Lionel Messi", desc: "Consistência expressiva de engajamento em marcos históricos de competições esportivas." },
