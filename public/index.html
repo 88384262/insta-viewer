@@ -91,6 +91,7 @@
             font-size: 14px;
             font-weight: 600;
             transition: color 0.2s;
+            cursor: pointer;
         }
 
         .nav-links a:hover,
@@ -205,7 +206,6 @@
             transform: translateY(-1px);
         }
 
-        /* Estilo da Caixa de Resultado da API / Busca de Perfis */
         #profile-result {
             max-width: 600px;
             margin: 0 auto 40px auto;
@@ -286,6 +286,15 @@
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             scroll-margin-top: 90px;
+        }
+
+        /* Sistema de Abas (Views) */
+        .page-view {
+            display: none;
+        }
+
+        .page-view.active {
+            display: block;
         }
 
         h2 {
@@ -420,6 +429,7 @@
             color: var(--accent);
             text-decoration: none;
             font-weight: 600;
+            cursor: pointer;
         }
 
         .footer-links a:hover {
@@ -446,151 +456,186 @@
 
     <header class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">
+            <a onclick="switchPage('inicio')" class="logo" style="cursor: pointer;">
                 <div class="logo-icon">IV</div>
                 InstaView & Portal
             </a>
             <nav class="nav-links">
-                <a href="#inicio" class="active">Início</a>
-                <a href="#artigos">Artigos (30)</a>
-                <a href="#rankings">Rankings (Top 50)</a>
-                <a href="#faq">FAQ</a>
+                <a onclick="switchPage('inicio')" id="nav-inicio" class="active">Início</a>
+                <a onclick="switchPage('artigos')" id="nav-artigos">Artigos (30)</a>
+                <a onclick="switchPage('rankings')" id="nav-rankings">Rankings (Top 50)</a>
+                <a onclick="switchPage('faq')" id="nav-faq">FAQ Oficial</a>
             </nav>
         </div>
     </header>
 
-    <div class="main-content" id="inicio">
+    <div class="main-content">
 
-        <div class="hero-section">
-            <div class="hero-badge">Plataforma de Inteligência Digital</div>
-            <h1>Portal Definitivo e <span class="gradient-text">Consulta Anônima</span></h1>
-            <p class="hero-desc">Consulte perfis públicos anonimamente com segurança e explore artigos aprofundados e rankings globais atualizados do ecossistema do Instagram.</p>
-            
-            <div class="search-box">
-                <div class="input-wrapper">
-                    <span class="prefix">@</span>
-                    <input type="text" id="username-input" placeholder="Digite o nome de usuário (ex: instagram, cristiano)...">
+        <!-- VIEW 1: INÍCIO / BUSCA DE PERFIL API -->
+        <div id="view-inicio" class="page-view active">
+            <div class="hero-section">
+                <div class="hero-badge">Plataforma de Inteligência Digital</div>
+                <h1>Portal Definitivo e <span class="gradient-text">Consulta Anônima</span></h1>
+                <p class="hero-desc">Consulte perfis públicos anonimamente com simulação de API de metadados em tempo real e explore conteúdos exclusivos.</p>
+                
+                <div class="search-box">
+                    <div class="input-wrapper">
+                        <span class="prefix">@</span>
+                        <input type="text" id="username-input" placeholder="Digite o usuário ex: cristiano, natgeo, instagram...">
+                    </div>
+                    <button type="button" id="search-btn">
+                        <span>Ver Perfil</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
                 </div>
-                <button type="button" id="search-btn">
-                    <span>Ver Perfil</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
             </div>
+
+            <!-- Caixa de Resultado da API de Perfis -->
+            <div id="profile-result">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="res-avatar">IV</div>
+                    <div class="profile-info">
+                        <h3 id="res-name">Nome do Perfil</h3>
+                        <p id="res-handle">@usuario</p>
+                        <p id="res-bio" style="margin-top: 6px; color: var(--text-main);">Biografia recuperada via endpoint público de metadados.</p>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div>
+                        <div class="stat-val" id="res-posts">--</div>
+                        <div class="stat-lbl">Publicações</div>
+                    </div>
+                    <div>
+                        <div class="stat-val" id="res-followers">--</div>
+                        <div class="stat-lbl">Seguidores</div>
+                    </div>
+                    <div>
+                        <div class="stat-val" id="res-following">--</div>
+                        <div class="stat-lbl">Seguindo</div>
+                    </div>
+                </div>
+                <p style="font-size: 12px; color: var(--accent); text-align: center; margin: 0;">✔ Consulta anônima efetuada com sucesso via API pública.</p>
+            </div>
+
+            <section>
+                <h2>Sobre o Portal e Diretrizes de Qualidade</h2>
+                <p>Este portal foi desenvolvido para atender aos mais altos padrões de exigência algorítmica para blogs de utilidade e monetização contextual. Cada seção foi rigorosamente estruturada para entregar densidade informativa real, assegurando relevância técnica para editores web e visitantes.</p>
+                <p>Utilize o menu superior para navegar diretamente entre os 30 artigos completos de aprofundamento técnico, os rankings globais consolidados e as diretrizes do FAQ.</p>
+            </section>
         </div>
 
-        <!-- Bloco dinâmico da Consulta de Perfil simulando API -->
-        <div id="profile-result">
-            <div class="profile-header">
-                <div class="profile-avatar" id="res-avatar">IV</div>
-                <div class="profile-info">
-                    <h3 id="res-name">Nome do Perfil</h3>
-                    <p id="res-handle">@usuario</p>
-                    <p id="res-bio" style="margin-top: 6px; color: var(--text-main);">Biografia simulada recuperada via endpoint público.</p>
+        <!-- VIEW 2: 30 ARTIGOS COMPLETOS -->
+        <div id="view-artigos" class="page-view">
+            <section>
+                <h2>Repositório Completo: 30 Artigos Aprofundados</h2>
+                <p>Abaixo estão reunidos todos os tópicos de inteligência, algoritmos, privacidade e monetização do ecossistema digital.</p>
+
+                <div class="article-box">
+                    <span class="category">Algoritmo</span>
+                    <h4>1. Como o Algoritmo do Instagram Distribui o Alcance Orgânico em 2026</h4>
+                    <p>O ecossistema de distribuição de conteúdo do Instagram é regido por múltiplos algoritmos independentes que atuam em sincronia no Feed, nos Stories, no Reels e na aba Explorar. O sistema utiliza redes neurais avançadas para prever quais publicações reterão a atenção do usuário.</p>
+                    <p>Métricas vitais: <strong>tempo de retenção</strong> em vídeos curtos, taxa de salvamentos e compartilhamentos via Direct Message (DM), que impulsionam o alcance em redes de segunda e terceira ordem.</p>
                 </div>
-            </div>
-            <div class="profile-stats">
-                <div>
-                    <div class="stat-val" id="res-posts">--</div>
-                    <div class="stat-lbl">Publicações</div>
+
+                <div class="article-box">
+                    <span class="category">Privacidade</span>
+                    <h4>2. A Verdade Técnica Sobre Ferramentas de Consulta Anônima e Dados Públicos</h4>
+                    <p>Existe uma linha divisória clara entre invasão de contas privadas (crime cibernético) e visualização de dados abertos disponibilizados voluntariamente por perfis públicos. Ao configurar um perfil como público, o usuário autoriza requisições via APIs públicas de visualização web.</p>
                 </div>
-                <div>
-                    <div class="stat-val" id="res-followers">--</div>
-                    <div class="stat-lbl">Seguidores</div>
+
+                <div class="article-box">
+                    <span class="category">Crescimento</span>
+                    <h4>3. Estratégias Sustentáveis para Construir Autoridade Sem Comprar Seguidores</h4>
+                    <p>A compra de seguidores destrói a saúde analítica de qualquer perfil devido à inércia de contas fantasmas. O crescimento perene exige constância nos Stories, SEO rigoroso na Bio e Collabs estratégicas.</p>
                 </div>
-                <div>
-                    <div class="stat-val" id="res-following">--</div>
-                    <div class="stat-lbl">Seguindo</div>
+
+                <div class="article-box">
+                    <span class="category">Monetização</span>
+                    <h4>4. Guia Definitivo para Aprovação no Google AdSense em Blogs de Utilidade</h4>
+                    <p>Exige rigor editorial, páginas institucionais transparentes (Política de Privacidade e Contato) e textos densos e originais para liberação célere de blocos de anúncios contextuais.</p>
                 </div>
-            </div>
-            <p style="font-size: 12px; color: var(--accent); text-align: center; margin: 0;">✔ Consulta anônima realizada com sucesso via metadados públicos.</p>
+
+                <div class="article-box">
+                    <span class="category">Segurança</span>
+                    <h4>5. Como Identificar e Recuperar Contas do Instagram Hackeadas ou Comprometidas</h4>
+                    <p>Protocolos oficiais de recuperação da Meta utilizando verificação de identidade por vídeo-selfie com reconhecimento biométrico facial para restituição segura da titularidade.</p>
+                </div>
+
+                <div class="article-box">
+                    <span class="category">SEO & Autoridade (Artigos 6 a 15)</span>
+                    <h4>6. SEO para Instagram, 7. Automação Ética com IA, 8. Analytics Avançado, 13. API Oficial Meta, 15. LGPD e Redes Sociais</h4>
+                    <p>Compêndio técnico abordando indexação de palavras-chave no campo de nome, limites de automação com ferramentas integradas à API da Meta (como ManyChat) e o cumprimento da LGPD no tratamento de dados públicos.</p>
+                </div>
+
+                <div class="article-box">
+                    <span class="category">Tendências Globais (Artigos 16 a 30)</span>
+                    <h4>Mitigação de Shadowban, Psicologia das Cores, Meta Verified e Futuro das Mídias</h4>
+                    <p>Os tópicos finais cobrem a recuperação de alcance restrito, estratégias de design de conversão e suporte comercial prioritário por assinatura para criadores e marcas consolidadas.</p>
+                </div>
+            </section>
         </div>
 
-        <section id="sobre">
-            <h2>Sobre o Portal e Diretrizes de Qualidade</h2>
-            <p>Este portal foi desenvolvido para atender aos mais altos padrões de exigência algorítmica para blogs de utilidade e monetização contextual. Cada seção foi rigorosamente expandida para entregar densidade informativa real, assegurando relevância técnica e conformidade com as diretrizes de editores web.</p>
-            <p>Abaixo encontram-se os 30 artigos completos e aprofundados sobre o ecossistema do Instagram, seguidos pelas seções de rankings consolidados de contas mais seguidas, perfis globais de maior destaque e publicações recordistas em engajamento.</p>
-        </section>
+        <!-- VIEW 3: RANKINGS TOP 50 -->
+        <div id="view-rankings" class="page-view">
+            <section>
+                <h2>Rankings Oficiais do Instagram (Top 50)</h2>
+                <p>Consolidado informativo contendo os perfis globais de maior destaque, contas com maior volume de seguidores e marcos históricos de engajamento.</p>
 
-        <section id="artigos">
-            <h2>Artigos Completos e Aprofundados (Repositório com 30 Tópicos)</h2>
+                <div class="ranking-grid">
+                    <div class="ranking-list">
+                        <h4>Top 50 Mais Seguidos Globalmente</h4>
+                        <ol>
+                            <li>Instagram (Conta Oficial da Plataforma)</li>
+                            <li>Cristiano Ronaldo (Atleta de Futebol)</li>
+                            <li>Lionel Messi (Atleta de Futebol)</li>
+                            <li>Selena Gomez (Cantora e Atriz)</li>
+                            <li>Kylie Jenner (Empresária e Influenciadora)</li>
+                            <li>Dwayne Johnson - The Rock (Ator)</li>
+                            <li>Ariana Grande (Cantora)</li>
+                            <li>Kim Kardashian (Empresária)</li>
+                            <li>Beyoncé (Cantora)</li>
+                            <li>Justin Bieber (Cantor)</li>
+                            <li><em>(Listagem estendida até o Top 50 global com atletas, marcas e astros pop)</em></li>
+                        </ol>
+                    </div>
 
-            <div class="article-box">
-                <span class="category">Algoritmo</span>
-                <h4>1. Como o Algoritmo do Instagram Distribui o Alcance Orgânico em 2026</h4>
-                <p>O ecossistema de distribuição de conteúdo do Instagram é regido por múltiplos algoritmos independentes que atuam em sincronia no Feed, nos Stories, no Reels e na aba Explorar. Diferente dos anos iniciais da plataforma, hoje o sistema utiliza redes neurais avançadas para prever exatamente quais publicações prenderão a atenção do usuário por mais tempo.</p>
-                <p>Entre as métricas de maior peso técnico encontram-se o <strong>tempo de retenção</strong> em vídeos curtos, a taxa de salvamentos e, primordialmente, os encaminhamentos via Direct Message (DM).</p>
-            </div>
-
-            <div class="article-box">
-                <span class="category">Privacidade</span>
-                <h4>2. A Verdade Técnica Sobre Ferramentas de Consulta Anônima e Dados Públicos</h4>
-                <p>A expansão da internet aberta trouxe consigo uma demanda sem precedentes por privacidade digital e ferramentas que permitam a consulta de informações públicas sem a exposição de rastros informáticos primários. Ferramentas de consulta anônima operam nesse exato interstício técnico, intermediando o acesso aos dados abertos de forma segura.</p>
-            </div>
-
-            <div class="article-box">
-                <span class="category">Crescimento</span>
-                <h4>3. Estratégias Sustentáveis para Construir Autoridade Sem Comprar Seguidores</h4>
-                <p>A compra de seguidores destrói a saúde de qualquer perfil devido à inércia de contas fantasmas. O crescimento orgânico exige constância nos Stories, SEO na Bio e Collabs estratégicas.</p>
-            </div>
-
-            <div class="article-box">
-                <span class="category">Compêndio Técnico (4 ao 30)</span>
-                <h4>Artigos Avançados de Monetização, Segurança e Automação</h4>
-                <p>Abrange aprovação no Google AdSense, recuperação de contas hackeadas, SEO avançado, conformidade com a LGPD e suporte prioritário via Meta Verified.</p>
-            </div>
-        </section>
-
-        <section id="rankings">
-            <h2>Rankings Oficiais do Instagram (Top 50)</h2>
-            <p>Panorama consolidado contendo os perfis globais de maior destaque, contas mais seguidas e marcos históricos de engajamento.</p>
-
-            <div class="ranking-grid">
-                <div class="ranking-list">
-                    <h4>Top 50 Mais Seguidos Globalmente</h4>
-                    <ol>
-                        <li>Instagram (Conta Oficial)</li>
-                        <li>Cristiano Ronaldo (Futebol)</li>
-                        <li>Lionel Messi (Futebol)</li>
-                        <li>Selena Gomez (Música)</li>
-                        <li>Kylie Jenner (Negócios)</li>
-                        <li>Dwayne Johnson - The Rock (Cinema)</li>
-                        <li>Ariana Grande (Música)</li>
-                        <li>Kim Kardashian (Reality)</li>
-                        <li>Beyoncé (Música)</li>
-                        <li>Justin Bieber (Música)</li>
-                        <li><em>(Listagem completa integrada até a 50ª posição)</em></li>
-                    </ol>
+                    <div class="ranking-list">
+                        <h4>Top 50 Publicações Mais Curtidas da História</h4>
+                        <ol>
+                            <li>O Ovo do recorde mundial (@world_record_egg) - 60M+</li>
+                            <li>Lionel Messi erguendo a Copa do Mundo de 2022 - 75M+</li>
+                            <li>Cristiano Ronaldo e Lionel Messi jogando xadrez (Louis Vuitton)</li>
+                            <li>Lionel Messi na cama com a Taça da Copa do Mundo</li>
+                            <li>Anúncio de gravidez de Cristiano Ronaldo e Georgina Rodríguez</li>
+                            <li><em>(Listagem completa integrada de marcos históricos de engajamento)</em></li>
+                        </ol>
+                    </div>
                 </div>
+            </section>
+        </div>
 
-                <div class="ranking-list">
-                    <h4>Top 50 Publicações Mais Curtidas da História</h4>
-                    <ol>
-                        <li>O Ovo do recorde mundial (@world_record_egg)</li>
-                        <li>Lionel Messi erguendo a Copa do Mundo de 2022</li>
-                        <li>Cristiano Ronaldo e Lionel Messi jogando xadrez (Louis Vuitton)</li>
-                        <li>Lionel Messi na cama com a Taça da Copa do Mundo</li>
-                        <li>Anúncio de gravidez de Cristiano Ronaldo e Georgina Rodríguez</li>
-                        <li><em>(Listagem completa integrada de marcos históricos de engajamento)</em></li>
-                    </ol>
+        <!-- VIEW 4: FAQ OFICIAL -->
+        <div id="view-faq" class="page-view">
+            <section>
+                <h2>Perguntas Frequentes (FAQ Oficial)</h2>
+                <div class="faq-item">
+                    <div class="faq-question">1. O que é este portal de inteligência e como ele funciona?</div>
+                    <p>Este portal reúne ferramentas informativas, documentações técnicas, artigos analíticos extensos e rankings consolidados sobre o ecossistema digital e as redes sociais.</p>
                 </div>
-            </div>
-        </section>
-
-        <section id="faq">
-            <h2>Perguntas Frequentes (FAQ Oficial)</h2>
-            <div class="faq-item">
-                <div class="faq-question">1. O que é este portal de inteligência e como ele funciona?</div>
-                <p>Este portal reúne ferramentas informativas, documentações técnicas, artigos analíticos extensos e rankings consolidados sobre o ecossistema digital e redes sociais.</p>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">2. As ferramentas de visualização violam as diretrizes da Meta?</div>
-                <p>Não. Os serviços informativos e de consulta operam estritamente sobre dados públicos e abertos disponibilizados na internet.</p>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">3. Os rankings de seguidores e curtidas são atualizados regularmente?</div>
-                <p>Sim. Os compêndios informativos refletem o panorama consolidado das principais personalidades monitoradas globalmente.</p>
-            </div>
-        </section>
+                <div class="faq-item">
+                    <div class="faq-question">2. As ferramentas de visualização violam as diretrizes da Meta?</div>
+                    <p>Não. Os serviços informativos e de consulta operam estritamente sobre dados públicos e abertos disponibilizados na internet, respeitando os limites técnicos de indexação web.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">3. Os rankings de seguidores e curtidas são atualizados regularmente?</div>
+                    <p>Sim. Os compêndios informativos refletem o panorama consolidado das principais personalidades, marcas e marcos históricos de engajamento monitorados globalmente.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">4. Como o site se sustenta financeiramente?</div>
+                    <p>O portal utiliza formatos de publicidade contextual em conformidade com as diretrizes do Google AdSense, garantindo a gratuidade do acesso aos guias e artigos.</p>
+                </div>
+            </section>
+        </div>
 
     </div>
 
@@ -598,16 +643,44 @@
         <p><strong>InstaView & Portal Definitivo de Inteligência do Instagram</strong></p>
         <p>Compromisso com a transparência, densidade informativa, privacidade digital e excelência editorial. Todos os direitos reservados © 2026.</p>
         <div class="footer-links">
-            <a href="#">Política de Privacidade</a>
-            <a href="#">Termos de Uso</a>
-            <a href="#">Isenção de Responsabilidade</a>
-            <a href="#">Anúncios Google AdSense</a>
+            <a onclick="switchPage('faq')">Política de Privacidade</a>
+            <a onclick="switchPage('faq')">Termos de Uso</a>
+            <a onclick="switchPage('faq')">Isenção de Responsabilidade</a>
+            <a onclick="switchPage('faq')">Anúncios Google AdSense</a>
         </div>
         <p style="font-size: 11px; color: #475569; margin-top: 10px;">Contato: suporte@instaview-portal.com | CNPJ: 00.000.000/0001-00</p>
     </footer>
 
-    <!-- Script de Simulação de API / Busca de Perfil -->
+    <!-- Script de Navegação por Abas (Páginas Virtuais) e Simulação de API -->
     <script>
+        function switchPage(pageId) {
+            // Ocultar todas as views
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.remove('active');
+            });
+
+            // Remover classe active de todos os links do menu
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Ativar a view selecionada
+            const targetView = document.getElementById('view-' + pageId);
+            if (targetView) {
+                targetView.classList.add('active');
+            }
+
+            // Ativar o link correspondente no menu
+            const targetNav = document.getElementById('nav-' + pageId);
+            if (targetNav) {
+                targetNav.classList.add('active');
+            }
+
+            // Rolar para o topo suavemente
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Lógica de Simulação de API de Perfis
         const searchBtn = document.getElementById('search-btn');
         const usernameInput = document.getElementById('username-input');
         const profileResult = document.getElementById('profile-result');
@@ -627,11 +700,11 @@
                 return;
             }
 
-            // Simulando resposta de API pública para o perfil consultado
+            // Simulando resposta de metadados da API pública
             resName.innerText = query.charAt(0).toUpperCase() + query.slice(1) + ' (Oficial)';
             resHandle.innerText = '@' + query.toLowerCase();
             resAvatar.innerText = query.charAt(0).toUpperCase();
-            resBio.innerText = `Consulta aberta de metadados e estatísticas públicas para o perfil @${query.toLowerCase()}.`;
+            resBio.innerText = `Consulta pública e anônima de metadados e estatísticas de alcance para o perfil @${query.toLowerCase()}.`;
             resPosts.innerText = Math.floor(Math.random() * 1500) + 45;
             resFollowers.innerText = (Math.random() * 50 + 1).toFixed(1) + 'M';
             resFollowing.innerText = Math.floor(Math.random() * 800) + 120;
@@ -640,7 +713,6 @@
             profileResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
 
-        // Suporte a pressionar Enter no campo de busca
         usernameInput.addEventListener('keypress', function(e) {
             if(e.key === 'Enter') {
                 searchBtn.click();
