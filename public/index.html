@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InstaView - Consulta API e Repositório Completo</title>
+    <title>InstaView - Consulta de Perfis e Repositório</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -75,7 +75,7 @@
 
         .nav-links {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -147,7 +147,7 @@
             margin: 0 auto 32px;
         }
 
-        /* Formulário de Busca API */
+        /* Formulário de Busca */
         .search-box {
             display: flex;
             gap: 12px;
@@ -262,7 +262,7 @@
         .post-card:hover .post-overlay { opacity: 1; }
         .story-time { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.6); padding: 2px 6px; font-size: 10px; border-radius: 4px; }
 
-        /* Grade de Artigos e Rankings */
+        /* Grades e Cards Clicáveis */
         .grid-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -276,21 +276,67 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .content-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
         }
         .content-card h3 { color: var(--text-main); font-size: 16px; margin-bottom: 8px; }
         .content-card p { color: var(--text-muted); font-size: 13px; line-height: 1.5; }
         .rank-number { font-size: 12px; font-weight: 800; color: var(--accent); margin-bottom: 6px; display: block; text-transform: uppercase; }
 
-        /* Modal */
+        /* Leitor de Artigo Completo */
+        #articleReader {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .back-btn {
+            background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
+            padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 24px;
+            display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
+        }
+        .back-btn:hover { color: #fff; border-color: var(--accent); }
+        .article-body h2 { font-size: 22px; margin: 20px 0 10px; color: #fff; }
+        .article-body p { color: var(--text-muted); font-size: 15px; margin-bottom: 16px; line-height: 1.7; }
+
+        /* Seção de Contatos */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .contact-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 30px;
+            text-align: center;
+        }
+        .contact-card h3 { margin-bottom: 10px; font-size: 18px; color: #fff; }
+        .contact-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+        .contact-link {
+            display: inline-block; background: var(--accent); color: white; padding: 10px 20px;
+            border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px;
+        }
+
+        /* Modal Geral */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);
             display: flex; align-items: center; justify-content: center; z-index: 1000;
         }
         .modal-content {
-            background: var(--card-bg); padding: 20px; border-radius: var(--radius-md); max-width: 500px; width: 90%; text-align: center; border: 1px solid var(--border-color);
+            background: var(--card-bg); padding: 24px; border-radius: var(--radius-md); max-width: 500px; width: 90%; text-align: center; border: 1px solid var(--border-color);
         }
         .modal-content img { max-height: 350px; max-width: 100%; border-radius: 8px; margin-bottom: 16px; }
-        .modal-actions { display: flex; gap: 10px; justify-content: center; }
+        .modal-actions { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
         .btn-modal { padding: 10px 20px; border-radius: 8px; font-weight: 700; text-decoration: none; cursor: pointer; font-size: 14px; border: none; }
         .btn-download { background: var(--accent); color: white; }
         .btn-close { background: var(--border-color); color: var(--text-main); }
@@ -302,27 +348,28 @@
 
     <header class="navbar">
         <div class="nav-container">
-            <a class="logo" onclick="document.querySelector('[data-tab=\'tab-api\']').click()">
+            <a class="logo" onclick="document.querySelector('[data-tab=\'tab-search\']').click()">
                 <div class="logo-icon">IV</div>
-                InstaView API
+                InstaView
             </a>
             <nav class="nav-links">
-                <button class="tab-btn active" data-tab="tab-api">Consulta API</button>
+                <button class="tab-btn active" data-tab="tab-search">Consulta de Perfis</button>
                 <button class="tab-btn" data-tab="tab-articles">Repositório (30 Artigos)</button>
                 <button class="tab-btn" data-tab="tab-rankings">Rankings Top 50</button>
                 <button class="tab-btn" data-tab="tab-faq">FAQ</button>
+                <button class="tab-btn" data-tab="tab-contacts">Contatos</button>
             </nav>
         </div>
     </header>
 
     <div class="main-content">
 
-        <!-- ABA 1: CONSULTA API -->
-        <div id="tab-api" class="tab-content">
+        <!-- ABA 1: CONSULTA DE PERFIS -->
+        <div id="tab-search" class="tab-content">
             <div class="hero-section">
-                <div class="hero-badge">Conexão Backend Ativa</div>
-                <h1>Consulta API de <span class="gradient-text">Perfis Públicos</span></h1>
-                <p class="hero-desc">Insira o nome de usuário exato para puxar os dados diretamente do endpoint estruturado.</p>
+                <div class="hero-badge">Busca em Tempo Real</div>
+                <h1>Consulta de <span class="gradient-text">Perfis Públicos</span></h1>
+                <p class="hero-desc">Insira o nome de usuário exato para puxar os dados, postagens e stories recentes.</p>
                 
                 <form id="searchForm" class="search-box">
                     <div class="input-wrapper">
@@ -339,7 +386,7 @@
                 </div>
             </div>
 
-            <div id="loader" class="loader hidden">Consultando dados na API...</div>
+            <div id="loader" class="loader hidden">Buscando dados do perfil...</div>
             <div id="errorMessage" class="error-box hidden"></div>
 
             <div id="profileResult" class="hidden">
@@ -383,57 +430,84 @@
             </div>
         </div>
 
-        <!-- ABA 2: 30 ARTIGOS COMPLETOS -->
+        <!-- ABA 2: REPOSITÓRIO (30 ARTIGOS COM LEITURA COMPLETA) -->
         <div id="tab-articles" class="tab-content hidden">
-            <div class="hero-section" style="margin-bottom: 20px;">
-                <h1>Repositório Técnico: <span class="gradient-text">30 Artigos Completos</span></h1>
-                <p class="hero-desc">Documentação aprofundada estruturada individualmente para consulta técnica avançada.</p>
+            <div id="articlesListContainer">
+                <div class="hero-section" style="margin-bottom: 20px;">
+                    <h1>Repositório Técnico: <span class="gradient-text">30 Artigos Completos</span></h1>
+                    <p class="hero-desc">Clique em qualquer artigo abaixo para abrir a leitura completa e detalhada.</p>
+                </div>
+                <div class="grid-list" id="articlesGrid"></div>
             </div>
-            <div class="grid-list" id="articlesGrid">
-                <!-- Gerado via loop de 30 artigos -->
+            <div id="articleReader" class="hidden">
+                <button type="button" class="back-btn" id="backToArticles">← Voltar para a lista</button>
+                <div id="articleContentArea"></div>
             </div>
         </div>
 
-        <!-- ABA 3: RANKINGS TOP 50 -->
+        <!-- ABA 3: RANKINGS TOP 50 (COM PERFIS REAIS E CLICÁVEIS) -->
         <div id="tab-rankings" class="tab-content hidden">
             <div class="hero-section" style="margin-bottom: 20px;">
                 <h1>Rankings Oficiais <span class="gradient-text">Top 50 Contas Globais</span></h1>
-                <p class="hero-desc">Monitoramento contínuo das contas com maior expressividade e volume de seguidores ativos no mundo.</p>
+                <p class="hero-desc">Monitoramento contínuo das contas com maior expressividade e volume de seguidores ativos no mundo. Clique em qualquer perfil para ver detalhes.</p>
             </div>
-            <div class="grid-list" id="rankingsGrid">
-                <!-- Gerado via loop de 50 perfis -->
-            </div>
+            <div class="grid-list" id="rankingsGrid"></div>
         </div>
 
         <!-- ABA 4: FAQ -->
         <div id="tab-faq" class="tab-content hidden">
             <div class="hero-section" style="margin-bottom: 20px;">
                 <h1>Perguntas <span class="gradient-text">Frequentes (FAQ)</span></h1>
-                <p class="hero-desc">Esclarecimentos diretos sobre o consumo da API, termos de privacidade e diretrizes do sistema.</p>
+                <p class="hero-desc">Esclarecimentos diretos sobre o sistema e diretrizes de uso.</p>
             </div>
             <div class="grid-list">
                 <div class="content-card">
-                    <h3>Como o sistema se conecta à API?</h3>
-                    <p>As requisições disparam diretamente para o endpoint configurado no backend (`/api/profile?username=`), validando dados em tempo real sem intermediários.</p>
+                    <h3>Como o sistema consulta os perfis?</h3>
+                    <p>As consultas utilizam endpoints estruturados que buscam metadados diretamente de perfis públicos em tempo real.</p>
                 </div>
                 <div class="content-card">
                     <h3>É possível visualizar perfis privados?</h3>
-                    <p>Não. Por questões de conformidade com as diretrizes de privacidade e segurança da plataforma, perfis privados retornam apenas metadados de status restrito.</p>
+                    <p>Não. Por questões de segurança e privacidade da plataforma, perfis privados retornam apenas metadados restritos.</p>
                 </div>
                 <div class="content-card">
-                    <h3>Como faço para baixar mídias de posts ou stories?</h3>
-                    <p>Basta clicar em cima de qualquer miniatura na tela de resultados da API para abrir o modal de visualização e utilizar o botão de download direto.</p>
+                    <h3>Como faço para baixar mídias?</h3>
+                    <p>Basta clicar em cima de qualquer foto de post ou story na consulta para abrir o painel de visualização e download.</p>
                 </div>
                 <div class="content-card">
                     <h3>Os artigos do repositório são atualizados?</h3>
-                    <p>Sim, os 30 artigos técnicos cobrem desde algoritmos de distribuição de alcance orgânico até padrões modernos de segurança e LGPD.</p>
+                    <p>Sim, todos os 30 artigos técnicos passam por revisões periódicas sobre algoritmos, performance e segurança.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA 5: CONTATOS -->
+        <div id="tab-contacts" class="tab-content hidden">
+            <div class="hero-section" style="margin-bottom: 20px;">
+                <h1>Canais de <span class="gradient-text">Atendimento e Contato</span></h1>
+                <p class="hero-desc">Fale conosco para dúvidas, suporte técnico, parcerias ou feedback sobre a plataforma.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3>Suporte Técnico</h3>
+                    <p>Encontrou instabilidade ou problemas ao consultar um perfil? Nossa equipe técnica está à disposição.</p>
+                    <a href="mailto:suporte@instaview.com" class="contact-link">Enviar E-mail</a>
+                </div>
+                <div class="contact-card">
+                    <h3>Comunidade & Parcerias</h3>
+                    <p>Interessado em parcerias comerciais ou em integrar nossas documentações técnicas?</p>
+                    <a href="mailto:parcerias@instaview.com" class="contact-link">Fale Conosco</a>
+                </div>
+                <div class="contact-card">
+                    <h3>Redes Sociais Oficiais</h3>
+                    <p>Siga nossos canais de atualização para acompanhar novas versões e melhorias no sistema.</p>
+                    <a href="https://instagram.com" target="_blank" class="contact-link">Abrir Instagram</a>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Modal de Mídia -->
+    <!-- Modal de Mídia (Posts/Stories) -->
     <div id="mediaModal" class="modal hidden">
         <div class="modal-content">
             <img id="modalImg" src="" alt="Mídia Ampliada">
@@ -444,57 +518,207 @@
         </div>
     </div>
 
+    <!-- Modal de Detalhes do Ranking -->
+    <div id="rankingModal" class="modal hidden">
+        <div class="modal-content" style="text-align: left;">
+            <span id="rankModalPosition" class="rank-number" style="font-size: 14px;"></span>
+            <h2 id="rankModalTitle" style="color: #fff; margin-bottom: 12px; font-size: 20px;"></h2>
+            <p id="rankModalDesc" style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;"></p>
+            <div style="background: rgba(11,15,25,0.5); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                <p style="font-size: 13px; color: #34d399; margin: 0;"><strong>Status:</strong> Conta verificada e monitorada ativamente.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="closeRankModal" class="btn-modal btn-close" style="width: 100%;">Fechar</button>
+            </div>
+        </div>
+    </div>
+
     <footer>
-        <p><strong>InstaView - Sistema de Consulta API e Documentação</strong></p>
+        <p><strong>InstaView - Sistema de Consulta e Documentação</strong></p>
         <p>Todos os direitos reservados © 2026.</p>
     </footer>
 
-    <!-- Script de Inclusão Dinâmica dos 30 Artigos e 50 Rankings + Seu Script da API -->
     <script>
     document.addEventListener("DOMContentLoaded", () => {
-        // Popular os 30 Artigos Completos
+        // 30 Artigos Completos com Leitura Dinâmica
         const articlesGrid = document.querySelector("#articlesGrid");
-        const articlesTitles = [
-            "Arquitetura de Distribuição de Alcance Orgânico", "Análise de Endpoints e Metadados Públicos na Web", 
-            "Otimização Avançada de Palavras-Chave na Bio", "Diretrizes de Conformidade para Indexação de Conteúdo", 
-            "Protocolos de Recuperação de Contas Comprometidas", "Engenharia Reversa de Requisições HTTP em Redes", 
-            "Segurança de Dados e Conformidade com a LGPD", "Estratégias de Mitigação contra Shadowban Algorítmico", 
-            "Automação Inteligente de Atendimento via Webhooks", "Psicologia Visual Aplicada a Miniaturas e Capas", 
-            "Métricas de Retenção e Engajamento de Longo Prazo", "Impacto do Selo de Verificação Comercial na Marca", 
-            "Monetização Indireta por Meio de Programas de Afiliados", "Análise Estatística de Horários de Pico de Postagem", 
-            "Boas Práticas no Desenvolvimento de Dashboards de Métricas", "O Papel das Redes Neurais na Recomendação de Feeds", 
-            "Gerenciamento de Cache e Performance em Aplicações Web", "Políticas de Uso de Cookies e Transparência de Dados", 
-            "Integração de APIs de Terceiros com Node.js e Express", "Design Responsivo e Acessibilidade em Interfaces Mobile", 
-            "Estratégias de Growth Hacking Baseadas em Dados Abertos", "Mitigação de Ataques de Sobrecarga e Rate Limiting", 
-            "Ferramentas de Monitoramento de Uptime e Latência de Servidor", "O Futuro da Indexação de Mídias Sociais em Buscadores", 
-            "Uso de Content Delivery Networks (CDNs) para Imagens", "Boas Práticas de Clean Code em JavaScript Moderno", 
-            "Tratamento Avançado de Erros e Exceções Assíncronas", "Arquitetura de Microsserviços para Consultas de Alta Escala", 
-            "Gestão de Repositórios Git e Versionamento Contínuo", "Documentação Técnica de APIs Restful de Alta Performance"
+        const articlesListContainer = document.querySelector("#articlesListContainer");
+        const articleReader = document.querySelector("#articleReader");
+        const articleContentArea = document.querySelector("#articleContentArea");
+        const backToArticles = document.querySelector("#backToArticles");
+
+        const articlesData = [
+            { title: "Arquitetura de Distribuição de Alcance Orgânico", desc: "Estudo detalhado sobre os algoritmos de entrega de conteúdo nas redes sociais modernas e retenção de público.", text: "O alcance orgânico é determinado por métricas complexas de engajamento nos primeiros minutos após a publicação. Fatores como tempo de retenção, salvamentos e compartilhamentos diretos sinalizam relevância para o algoritmo de distribuição." },
+            { title: "Análise de Endpoints e Metadados Públicos", desc: "Como funciona a varredura estruturada de dados abertos sem infringir protocolos internos de segurança.", descLong: "A extração segura de dados públicos baseia-se no respeito aos limites de taxa (rate limits) e na leitura exclusiva de informações expostas publicamente pelas plataformas, mantendo integridade e conformidade técnica." },
+            { title: "Otimização Avançada de Palavras-Chave na Bio", desc: "Técnicas de posicionamento orgânico e indexação em mecanismos internos de busca de perfis.", descLong: "O uso estratégico de termos-chave no nome e na biografia melhora significativamente a indexação nas buscas internas, facilitando que novos seguidores encontrem seu perfil de forma orgânica." },
+            { title: "Diretrizes de Conformidade para Indexação", desc: "Padrões exigidos para manter aplicações web em conformidade com as diretrizes de usabilidade e dados.", descLong: "A conformidade com padrões web garante que o sistema permaneça estável, seguro e acessível em diferentes navegadores e dispositivos, evitando bloqueios ou penalidades de infraestrutura." },
+            { title: "Protocolos de Recuperação de Contas", desc: "Procedimentos oficiais e suporte técnico para recuperação de acessos comprometidos por invasão.", descLong: "Em caso de comprometimento de credenciais, o uso imediato de verificação em duas etapas e recuperação por e-mail ou documento oficial é indispensável para reaver o controle da conta." },
+            { title: "Engenharia Reversa de Requisições HTTP", desc: "Análise de tráfego de rede e inspeção de pacotes de dados em aplicações web interativas.", descLong: "A inspeção de requisições ajuda desenvolvedores a compreenderem como os dados estruturados são transferidos entre cliente e servidor durante a navegação em portais públicos." },
+            { title: "Segurança de Dados e Conformidade LGPD", desc: "Boas práticas na manipulação, anonimização e armazenamento seguro de logs de acesso de usuários.", descLong: "A Lei General de Proteção de Dados estabelece diretrizes rígidas sobre o tratamento de informações pessoais, exigindo transparência total e segurança robusta em servidores." },
+            { title: "Estratégias de Mitigação contra Shadowban", desc: "Como identificar restrições invisíveis de alcance algorítmico e reverter quedas de engajamento.", descLong: "O shadowban ocorre geralmente devido ao uso de hashtags banidas ou comportamento automatizado excessivo. A solução envolve pausas estratégicas e foco em conteúdo original." },
+            { title: "Automação Inteligente via Webhooks", desc: "Integração de serviços externos de atendimento automatizado em tempo real com alta disponibilidade.", descLong: "Webhooks permitem que eventos em servidores disparem ações instantâneas em outras plataformas, otimizando fluxos de trabalho e atendimento ao usuário." },
+            { title: "Psicologia Visual em Miniaturas e Capas", desc: "O impacto do design contrastante nas taxas de clique e retenção visual de vídeos e publicações.", descLong: "Cores contrastantes, rostos expressivos e textos curtos aumentam expressivamente a taxa de cliques (CTR) em miniaturas de vídeos e postagens em redes." },
+            { title: "Métricas de Retenção e Engajamento", desc: "Avaliação aprofundada de tempo de tela, salvamentos, compartilhamentos e interações profundas.", descLong: "Curtidas já não são a única métrica relevante. O número de vezes que um conteúdo foi compartilhado ou salvo indica valor real entregue à audiência." },
+            { title: "Impacto do Selo de Verificação Comercial", desc: "Como a autenticação de contas corporativas protege marcas contra falsificação de identidade digital.", descLong: "O selo azul confere autoridade instantânea e protege tanto empresas quanto figuras públicas contra perfis falsos que tentam se passar por eles." },
+            { title: "Monetização Indireta por Afiliados", desc: "Criação de ecossistemas de conversão e rastreamento de links em portais de conteúdo especializado.", descLong: "O marketing de afiliados integra produtos recomendados de forma natural ao conteúdo, gerando receita recorrente através de cliques qualificados." },
+            { title: "Análise Estatística de Picos de Postagem", desc: "Identificação de janelas temporais de maior atividade do público-alvo para maximizar o alcance inicial.", descLong: "Publicar nos horários em que sua base específica de seguidores está mais ativa garante picos de engajamento logo nos primeiros minutos." },
+            { title: "Desenvolvimento de Dashboards de Métricas", desc: "Construção de painéis de controle analíticos com visualização em tempo real de indicadores de performance.", descLong: "Painéis centralizados facilitam o acompanhamento diário de métricas de crescimento, facilitando tomadas de decisão rápidas e assertivas." },
+            { title: "Redes Neurais na Recomendação de Feeds", desc: "O funcionamento do aprendizado de máquina na personalização do fluxo de conteúdos exibidos.", descLong: "Algoritmos baseados em IA analisam o histórico de interações de cada usuário para entregar um feed altamente personalizado e viciante." },
+            { title: "Gerenciamento de Cache e Performance Web", desc: "Otimização de tempo de carregamento de páginas através de estratégias avançadas de armazenamento temporário.", descLong: "O uso eficiente de cache reduz a carga no servidor e acelera a abertura de páginas, melhorando a experiência do usuário final." },
+            { title: "Políticas de Cookies e Transparência", desc: "Implementação de avisos de consentimento e conformidade com regulamentações internacionais de rastreio.", descLong: "Informar claramente quais dados são armazenados por meio de cookies é uma exigência legal e um sinal de respeito à privacidade do visitante." },
+            { title: "Integração de APIs com Node.js e Express", desc: "Construção de backends robustos para processamento de requisições assíncronas de alta escala.", descLong: "Node.js em conjunto com o framework Express oferece agilidade e estabilidade para lidar com milhares de requisições simultâneas." },
+            { title: "Design Responsivo em Interfaces Mobile", desc: "Adaptação de layouts fluidos para garantir usabilidade perfeita em smartphones e tablets de todos os portes.", descLong: "Como a maioria dos acessos ocorre via dispositivos móveis, o design mobile-first deixou de ser opcional e tornou-se obrigatório." },
+            { title: "Growth Hacking com Dados Abertos", desc: "Estratégias de crescimento acelerado baseadas na mineração e inteligência de informações públicas.", descLong: "Analisar tendências de mercado através de dados públicos permite identificar oportunidades de expansão de marca com baixo custo de aquisição." },
+            { title: "Mitigação de Ataques e Rate Limiting", desc: "Proteção contra abusos de requisições excessivas e controle de tráfego malicioso em servidores web.", descLong: "Limitar o número de requisições por IP protege a infraestrutura contra ataques de negação de serviço e raspagem de dados abusiva." },
+            { title: "Monitoramento de Uptime e Latência", desc: "Ferramentas de checagem contínua para garantir a estabilidade e o tempo de resposta das APIs.", descLong: "Sistemas de monitoramento disparam alertas imediatos caso ocorram quedas de servidores ou lentidão excessiva nas respostas." },
+            { title: "O Futuro da Indexação de Mídias Sociais", desc: "Como os motores de busca tradicionais estão catalogando publicações e perfis na web aberta.", descLong: "Buscas na web estão cada vez mais integradas a conteúdos de redes sociais, mudando a forma como marcas aparecem nos resultados de pesquisa." },
+            { title: "Uso de CDNs para Otimização de Mídia", desc: "Distribuição global de imagens e vídeos através de redes de entrega de conteúdo de alta velocidade.", descLong: "CDNs armazenam arquivos estáticos em servidores próximos geograficamente ao usuário, reduzindo drasticamente o tempo de carregamento." },
+            { title: "Clean Code em JavaScript Moderno", desc: "Padrões de escrita de código limpo, reutilizável e de fácil manutenção a longo prazo.", descLong: "Variáveis bem nomeadas, funções curtas e modularização evitam o débito técnico e facilitam manutenções futuras no código-fonte." },
+            { title: "Tratamento Avançado de Erros Assíncronos", desc: "Captura e exibição amigável de falhas de comunicação em aplicações web baseadas em promessas.", descLong: "Blocos try/catch bem estruturados evitam que falhas de rede quebrem a interface do usuário, exibindo avisos claros quando necessário." },
+            { title: "Arquitetura de Microsserviços Escaláveis", desc: "Desacoplamento de sistemas complexos para garantir flexibilidade e independência operacional.", descLong: "Dividir grandes aplicações em serviços menores e independentes facilita atualizações e escalabilidade sob demanda." },
+            { title: "Gestão de Repositórios Git e Versionamento", desc: "Fluxos de trabalho eficientes para controle de alterações e deploy contínuo em ambientes de produção.", descLong: "O uso correto de branches e commits organizados garante segurança ao implementar novas funcionalidades em projetos web." },
+            { title: "Documentação Técnica de APIs Restful", desc: "Padrões rigorosos de especificação de rotas, parâmetros e contratos de dados para desenvolvedores.", descLong: "Uma boa documentação acelera integrações e reduz dúvidas de equipes técnicas ao consumir serviços de backend." }
         ];
 
-        articlesGrid.innerHTML = articlesTitles.map((title, index) => `
-            <div class="content-card">
+        articlesGrid.innerHTML = articlesData.map((art, index) => `
+            <div class="content-card" data-index="${index}">
                 <div>
                     <span class="rank-number">Artigo Técnico #${index + 1}</span>
-                    <h3>${title}</h3>
-                    <p>Estudo aprofundado abordando diretrizes de engenharia, padrões de mercado, limitações técnicas de requisições e melhores práticas de implementação para ambientes de alta performance.</p>
+                    <h3>${art.title}</h3>
+                    <p>${art.desc}</p>
                 </div>
             </div>
         `).join('');
 
-        // Popular os Top 50 Perfis/Rankings
+        document.querySelectorAll(".content-card[data-index]").forEach(card => {
+            card.addEventListener("click", () => {
+                const idx = card.dataset.index;
+                const article = articlesData[idx];
+                articleContentArea.innerHTML = `
+                    <span class="rank-number">Artigo Técnico #${parseInt(idx) + 1}</span>
+                    <h1 style="font-size: 26px; margin-bottom: 16px; color: #fff;">${article.title}</h1>
+                    <div class="article-body">
+                        <p><strong>Resumo:</strong> ${article.desc}</p>
+                        <h2>Introdução e Contexto</h2>
+                        <p>${article.text || article.descLong}</p>
+                        <h2>Diretrizes Práticas e Implementação</h2>
+                        <p>${article.descLong || article.text}</p>
+                        <h2>Conclusão</h2>
+                        <p>A aplicação correta destas diretrizes assegura alto desempenho, conformidade técnica e estabilidade operacional em qualquer projeto web moderno.</p>
+                    </div>
+                `;
+                articlesListContainer.classList.add("hidden");
+                articleReader.classList.remove("hidden");
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        backToArticles.addEventListener("click", () => {
+            articleReader.classList.add("hidden");
+            articlesListContainer.classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Rankings Reais Top 50 (Nomes de Contas Verdadeiras)
+        const realRankings = [
+            { user: "@cristiano", name: "Cristiano Ronaldo", desc: "Liderança global em seguidores e métricas de impacto de marca na plataforma." },
+            { user: "@leomessi", name: "Lionel Messi", desc: "Consistência expressiva de engajamento em marcos históricos de competições esportivas." },
+            { user: "@selenagomez", name: "Selena Gomez", desc: "Referência internacional em comunidade ativa e alcance multicanal consolidado." },
+            { user: "@kyliejenner", name: "Kylie Jenner", desc: "Alto índice de conversão de visualizações em campanhas de produtos de grande porte." },
+            { user: "@therock", name: "Dwayne Johnson (The Rock)", desc: "Engajamento multigeracional sustentado por vídeos motivacionais e rotinas de treino." },
+            { user: "@arianagrande", name: "Ariana Grande", desc: "Expressivo volume de interações orgânicas em lançamentos fonográficos e artísticos." },
+            { user: "@kimkardashian", name: "Kim Kardashian", desc: "Monitoramento contínuo de tendências de comportamento e influência digital global." },
+            { user: "@beyonce", name: "Beyoncé Knowles-Carter", desc: "Marcos históricos de curtidas em anúncios conceituais de grande repercussão." },
+            { user: "@khloekardashian", name: "Khloé Kardashian", desc: "Consistência de alcance em publicações do ecossistema de entretenimento." },
+            { user: "@justinbieber", name: "Justin Bieber", desc: "Base global consolidada de fãs com alta taxa de resposta em campanhas de engajamento." },
+            { user: "@kendalljenner", name: "Kendall Jenner", desc: "Destaque em campanhas de moda e portfólios visuais de alta performance." },
+            { user: "@taylorswift", name: "Taylor Swift", desc: "Picos massivos de engajamento impulsionados por turnês globais e comunidade unida." },
+            { user: "@jlo", name: "Jennifer Lopez", desc: "Conteúdo dinâmico voltado para performance artística, dança e lifestyle." },
+            { user: "@virat.kohli", name: "Virat Kohli", desc: "Liderança expressiva em interações na Ásia e no ecossistema do críquete mundial." },
+            { user: "@nickiminaj", name: "Nicki Minaj", desc: "Comunidade extremamente engajada com forte mobilização em curtidas e comentários." },
+            { user: "@neymarjr", name: "Neymar Jr", desc: "Alto índice de interações em conteúdos de esporte, entretenimento e vida pessoal." },
+            { user: "@kourtneykardash", name: "Kourtney Kardashian", desc: "Engajamento estável em postagens de estilo de vida e marcas afiliadas." },
+            { user: "@mileycyrus", name: "Miley Cyrus", desc: "Repercussão global de premiações e projetos musicais independentes." },
+            { user: "@katyperry", name: "Katy Perry", desc: "Presença consolidada com campanhas interativas de grande apelo visual." },
+            { user: "@zendaya", name: "Zendaya", desc: "Crescimento acelerado de seguidores devido a papéis de destaque no cinema." },
+            { user: "@kevinhart4real", name: "Kevin Hart", desc: "Conteúdo de comédia com alta taxa de compartilhamento e retenção de vídeo." },
+            { user: "@iamcardib", name: "Cardi B", desc: "Engajamento orgânico massivo impulsionado por autenticidade e vídeos curtos." },
+            { user: "@kingjames", name: "LeBron James", desc: "Liderança esportiva norte-americana com forte apelo em projetos sociais e esportivos." },
+            { user: "@ddlovato", name: "Demi Lovato", desc: "Campanhas de conscientização e forte conexão emocional com os seguidores." },
+            { user: "@badgalriri", name: "Rihanna", desc: "Lançamentos de marcas de beleza com impacto direto nas menções da plataforma." },
+            { user: "@champagnepapi", name: "Drake", desc: "Anúncios surpresa de álbuns que geram recordes de comentários imediatos." },
+            { user: "@billieeilish", name: "Billie Eilish", desc: "Estética visual única com alta taxa de salvamentos em publicações de feed." },
+            { user: "@dualipa", name: "Dua Lipa", desc: "Conteúdos de viagens e turnês musicais com engajamento internacional consistente." },
+            { user: "@shrutzhaakon", name: "Shraddha Kapoor", desc: "Forte presença no mercado asiático de entretenimento e atuação cinematográfica." },
+            { user: "@lalalalisa_m", name: "Lisa (BLACKPINK)", desc: "Fenômeno global de K-pop com recordes absolutos de curtidas em minutos." },
+            { user: "@nasa", name: "NASA", desc: "Perfil institucional com maior autoridade científica e engajamento visual espacial." },
+            { user: "@charlidamelio", name: "Charli D'Amelio", desc: "Pioneirismo em vídeos curtos e retenção massiva de público jovem." },
+            { user: "@hudabeauty", name: "Huda Kattan", desc: "Autoridade em nicho de cosméticos e tutoriais passo a passo salvos pelo público." },
+            { user: "@robertdowneyjr", name: "Robert Downey Jr.", desc: "Carisma cinematográfico com forte engajamento em projetos sociais e ambientais." },
+            { user: "@chrishemsworth", name: "Chris Hemsworth", desc: "Rotinas de bem-estar físico e campanhas de saúde com ampla aceitação." },
+            { user: "@vindiesel", name: "Vin Diesel", desc: "Comunidade fiel de fãs de franquias de ação com forte apelo emocional." },
+            { user: "@davidbeckham", name: "David Beckham", desc: "Estilo de vida corporativo e familiar com excelente métrica de aceitação de marca." },
+            { user: "@ronaldinho", name: "Ronaldinho Gaúcho", desc: "Simpatia universal e engajamento nostálgico em conteúdos de futebol arte." },
+            { user: "@marcelotwelve", name: "Marcelo Vieira", desc: "Bastidores de clubes de futebol e engajamento com torcedores globais." },
+            { user: "@luissuarez9", name: "Luis Suárez", desc: "Comunidade regional e internacional de fãs de futebol altamente engajada." },
+            { user: "@paulodybala", name: "Paulo Dybala", desc: "Estilo de vida e moda combinados com o cotidiano do futebol europeu." },
+            { user: "@kingbach", name: "King Bach", desc: "Conteúdo de humor dinâmico adaptado para o consumo rápido em feeds." },
+            { user: "@zachking", name: "Zach King", desc: "Magia visual e edição de vídeos criativos com recordes de compartilhamentos." },
+            { user: "@lelepons", name: "Lele Pons", desc: "Esquetes de humor e entretenimento diário com alta taxa de comentários." },
+            { user: "@juanpazurita", name: "Juanpa Zurita", desc: "Projetos documentais e engajamento em causas sociais na América Latina." },
+            { user: "@anitta", name: "Anitta", desc: "Liderança expressiva na expansão da música latina para o mercado internacional." },
+            { user: "@whinderssonnunes", name: "Whindersson Nunes", desc: "Histórico de engajamento massivo em turnês de comédia e reflexões pessoais." },
+            { user: "@tatawerneck", name: "Tatá Werneck", desc: "Humor rápido e interações autênticas com figuras públicas do entretenimento." },
+            { user: "@gilberto", name: "Gilberto Nogueira (Gil do Vigor)", desc: "Representatividade e forte engajamento em campanhas de conscientização pública." },
+            { user: "@ivetesangalo", name: "Ivete Sangalo", desc: "Carisma consolidado no cenário musical brasileiro com alta taxa de resposta dos fãs." }
+        ];
+
         const rankingsGrid = document.querySelector("#rankingsGrid");
-        rankingsGrid.innerHTML = Array.from({ length: 50 }, (_, i) => `
-            <div class="content-card">
+        const rankingModal = document.querySelector("#rankingModal");
+        const rankModalPosition = document.querySelector("#rankModalPosition");
+        const rankModalTitle = document.querySelector("#rankModalTitle");
+        const rankModalDesc = document.querySelector("#rankModalDesc");
+        const closeRankModal = document.querySelector("#closeRankModal");
+
+        rankingsGrid.innerHTML = realRankings.map((item, i) => `
+            <div class="content-card rank-item" data-index="${i}">
                 <div>
                     <span class="rank-number">Posição Global #${i + 1}</span>
-                    <h3>@perfil_destaque_${i + 1}</h3>
-                    <p>Conta monitorada ativamente pelo sistema de rankeamento global, apresentando alto volume de interações e métricas consistentes de engajamento público.</p>
+                    <h3>${item.user}</h3>
+                    <p><strong>${item.name}</strong><br>${item.desc}</p>
                 </div>
             </div>
         `).join('');
 
-        // Seu Script Exato de Consulta à API
+        document.querySelectorAll(".rank-item").forEach(card => {
+            card.addEventListener("click", () => {
+                const idx = card.dataset.index;
+                const data = realRankings[idx];
+                rankModalPosition.textContent = `Posição Global #${parseInt(idx) + 1}`;
+                rankModalTitle.textContent = `${data.user} (${data.name})`;
+                rankModalDesc.textContent = data.desc;
+                rankingModal.classList.remove("hidden");
+            });
+        });
+
+        closeRankModal.addEventListener("click", () => rankingModal.classList.add("hidden"));
+        rankingModal.addEventListener("click", (e) => {
+            if (e.target === rankingModal) rankingModal.classList.add("hidden");
+        });
+
+        // Navegação por abas
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
+
+                btn.classList.add("active");
+                const targetTab = document.getElementById(btn.dataset.tab);
+                if (targetTab) targetTab.classList.remove("hidden");
+            });
+        });
+
+        // Script de Consulta de Perfil
         const searchForm = document.querySelector("#searchForm");
         const usernameInput = document.querySelector("#usernameInput");
         const loader = document.querySelector("#loader");
@@ -510,17 +734,6 @@
             btn.addEventListener("click", () => {
                 usernameInput.value = btn.dataset.user;
                 fetchProfile(btn.dataset.user);
-            });
-        });
-
-        document.querySelectorAll(".tab-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-                document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
-
-                btn.classList.add("active");
-                const targetTab = document.getElementById(btn.dataset.tab);
-                if (targetTab) targetTab.classList.remove("hidden");
             });
         });
 
@@ -592,7 +805,7 @@
             grid.innerHTML = "";
 
             if (stories.length === 0) {
-                grid.innerHTML = `<div class="empty-state">Nenhum story ativo nas últimas 24 horas.</div>`;
+                grid.innerHTML = `<div class="empty-state" style="color:var(--text-muted); font-size:13px;">Nenhum story ativo nas últimas 24 horas.</div>`;
                 return;
             }
 
@@ -611,7 +824,7 @@
             grid.innerHTML = "";
 
             if (posts.length === 0) {
-                grid.innerHTML = `<div class="empty-state">Nenhuma publicação encontrada neste perfil.</div>`;
+                grid.innerHTML = `<div class="empty-state" style="color:var(--text-muted); font-size:13px;">Nenhuma publicação encontrada neste perfil.</div>`;
                 return;
             }
 
